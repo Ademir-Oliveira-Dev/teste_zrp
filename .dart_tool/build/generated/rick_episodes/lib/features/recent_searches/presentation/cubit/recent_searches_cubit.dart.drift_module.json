@@ -1,0 +1,10 @@
+{
+  "elements": {},
+  "imports": [
+    "package:bloc/bloc.dart",
+    "package:equatable/equatable.dart",
+    "package:rick_episodes/features/recent_searches/domain/entities/recent_search.dart",
+    "package:rick_episodes/features/recent_searches/domain/usecases/get_recent_searches.dart",
+    "package:rick_episodes/features/recent_searches/domain/usecases/save_search.dart"
+  ]
+}

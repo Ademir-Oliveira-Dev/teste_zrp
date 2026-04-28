@@ -1,0 +1,9 @@
+{
+  "elements": {},
+  "imports": [
+    "package:dartz/dartz.dart",
+    "package:rick_episodes/core/error/failures.dart",
+    "package:rick_episodes/features/episodes/domain/entities/character.dart",
+    "package:rick_episodes/features/episodes/domain/entities/episode.dart"
+  ]
+}

@@ -1,0 +1,622 @@
+{
+  "elements": {
+    "AppDatabase": {
+      "id": {
+        "library_uri": "package:rick_episodes/core/database/app_database.dart",
+        "name": "AppDatabase"
+      },
+      "declaration": {
+        "source_uri": "package:rick_episodes/core/database/app_database.dart",
+        "offset": 1822,
+        "name": "AppDatabase"
+      },
+      "references": [
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "episodes_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "characters_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "favorites_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "recent_searches_table"
+        }
+      ],
+      "type": "database",
+      "tables": [
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "episodes_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "characters_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "favorites_table"
+        },
+        {
+          "library_uri": "package:rick_episodes/core/database/app_database.dart",
+          "name": "recent_searches_table"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "schema_version": 1,
+      "daos": [],
+      "has_constructor_arg": false
+    },
+    "episodes_table": {
+      "id": {
+        "library_uri": "package:rick_episodes/core/database/app_database.dart",
+        "name": "episodes_table"
+      },
+      "declaration": {
+        "source_uri": "package:rick_episodes/core/database/app_database.dart",
+        "offset": 383,
+        "name": "EpisodesTable"
+      },
+      "references": [],
+      "type": "table",
+      "columns": [
+        {
+          "sqlType": {
+            "builtin": "int"
+          },
+          "nullable": false,
+          "nameInSql": "id",
+          "nameInDart": "id",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 429,
+            "name": "id"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "name",
+          "nameInDart": "name",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 465,
+            "name": "name"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "air_date",
+          "nameInDart": "airDate",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 500,
+            "name": "airDate"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "episode",
+          "nameInDart": "episode",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 538,
+            "name": "episode"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "character_urls",
+          "nameInDart": "characterUrls",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 576,
+            "name": "characterUrls"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "url",
+          "nameInDart": "url",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 649,
+            "name": "url"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "dateTime"
+          },
+          "nullable": false,
+          "nameInSql": "cached_at",
+          "nameInDart": "cachedAt",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 687,
+            "name": "cachedAt"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        }
+      ],
+      "existing_data_class": null,
+      "table_constraints": [
+        {
+          "type": "primary_key",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "custom_parent_class": null,
+      "interfaces_for_row_class": [],
+      "fixed_entity_info_name": null,
+      "base_dart_name": "EpisodesTable",
+      "row_class_name": "EpisodesTableData",
+      "companion_class_name": null,
+      "without_rowid": false,
+      "strict": false,
+      "write_default_constraints": true,
+      "custom_constraints": [],
+      "attached_indices": []
+    },
+    "characters_table": {
+      "id": {
+        "library_uri": "package:rick_episodes/core/database/app_database.dart",
+        "name": "characters_table"
+      },
+      "declaration": {
+        "source_uri": "package:rick_episodes/core/database/app_database.dart",
+        "offset": 773,
+        "name": "CharactersTable"
+      },
+      "references": [],
+      "type": "table",
+      "columns": [
+        {
+          "sqlType": {
+            "builtin": "int"
+          },
+          "nullable": false,
+          "nameInSql": "id",
+          "nameInDart": "id",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 821,
+            "name": "id"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "name",
+          "nameInDart": "name",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 857,
+            "name": "name"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "status",
+          "nameInDart": "status",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 892,
+            "name": "status"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "species",
+          "nameInDart": "species",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 929,
+            "name": "species"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "gender",
+          "nameInDart": "gender",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 967,
+            "name": "gender"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "image",
+          "nameInDart": "image",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1004,
+            "name": "image"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "url",
+          "nameInDart": "url",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1040,
+            "name": "url"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "dateTime"
+          },
+          "nullable": false,
+          "nameInSql": "cached_at",
+          "nameInDart": "cachedAt",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1078,
+            "name": "cachedAt"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        }
+      ],
+      "existing_data_class": null,
+      "table_constraints": [
+        {
+          "type": "primary_key",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "custom_parent_class": null,
+      "interfaces_for_row_class": [],
+      "fixed_entity_info_name": null,
+      "base_dart_name": "CharactersTable",
+      "row_class_name": "CharactersTableData",
+      "companion_class_name": null,
+      "without_rowid": false,
+      "strict": false,
+      "write_default_constraints": true,
+      "custom_constraints": [],
+      "attached_indices": []
+    },
+    "favorites_table": {
+      "id": {
+        "library_uri": "package:rick_episodes/core/database/app_database.dart",
+        "name": "favorites_table"
+      },
+      "declaration": {
+        "source_uri": "package:rick_episodes/core/database/app_database.dart",
+        "offset": 1164,
+        "name": "FavoritesTable"
+      },
+      "references": [],
+      "type": "table",
+      "columns": [
+        {
+          "sqlType": {
+            "builtin": "int"
+          },
+          "nullable": false,
+          "nameInSql": "episode_id",
+          "nameInDart": "episodeId",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1211,
+            "name": "episodeId"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "dateTime"
+          },
+          "nullable": false,
+          "nameInSql": "saved_at",
+          "nameInDart": "savedAt",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1258,
+            "name": "savedAt"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        }
+      ],
+      "existing_data_class": null,
+      "table_constraints": [
+        {
+          "type": "primary_key",
+          "columns": [
+            "episode_id"
+          ]
+        }
+      ],
+      "custom_parent_class": null,
+      "interfaces_for_row_class": [],
+      "fixed_entity_info_name": null,
+      "base_dart_name": "FavoritesTable",
+      "row_class_name": "FavoritesTableData",
+      "companion_class_name": null,
+      "without_rowid": false,
+      "strict": false,
+      "write_default_constraints": true,
+      "custom_constraints": [],
+      "attached_indices": []
+    },
+    "recent_searches_table": {
+      "id": {
+        "library_uri": "package:rick_episodes/core/database/app_database.dart",
+        "name": "recent_searches_table"
+      },
+      "declaration": {
+        "source_uri": "package:rick_episodes/core/database/app_database.dart",
+        "offset": 1350,
+        "name": "RecentSearchesTable"
+      },
+      "references": [],
+      "type": "table",
+      "columns": [
+        {
+          "sqlType": {
+            "builtin": "int"
+          },
+          "nullable": false,
+          "nameInSql": "id",
+          "nameInDart": "id",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1402,
+            "name": "id"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [
+            {
+              "type": "primary",
+              "is_auto_increment": true
+            }
+          ],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "query",
+          "nameInDart": "query",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1454,
+            "name": "query"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "dateTime"
+          },
+          "nullable": false,
+          "nameInSql": "searched_at",
+          "nameInDart": "searchedAt",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 1494,
+            "name": "searchedAt"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        }
+      ],
+      "existing_data_class": null,
+      "table_constraints": [],
+      "custom_parent_class": null,
+      "interfaces_for_row_class": [],
+      "fixed_entity_info_name": null,
+      "base_dart_name": "RecentSearchesTable",
+      "row_class_name": "RecentSearchesTableData",
+      "companion_class_name": null,
+      "without_rowid": false,
+      "strict": false,
+      "write_default_constraints": true,
+      "custom_constraints": [],
+      "attached_indices": []
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:drift/native.dart",
+    "package:path_provider/path_provider.dart",
+    "package:path/path.dart"
+  ]
+}

@@ -1,0 +1,1 @@
+{"valid_import":true,"imports":[{"uri":"package:flutter/material.dart","transitive":false},{"uri":"package:flutter_bloc/flutter_bloc.dart","transitive":false},{"uri":"package:rick_episodes/core/di/injection_container.dart","transitive":false},{"uri":"package:rick_episodes/features/favorites/presentation/cubit/favorites_cubit.dart","transitive":false}],"elements":[]}

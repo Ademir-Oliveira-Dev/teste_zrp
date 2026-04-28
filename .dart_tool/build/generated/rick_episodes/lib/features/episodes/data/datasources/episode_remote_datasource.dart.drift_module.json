@@ -1,0 +1,10 @@
+{
+  "elements": {},
+  "imports": [
+    "package:dio/dio.dart",
+    "package:rick_episodes/core/error/exceptions.dart",
+    "package:rick_episodes/core/network/dio_client.dart",
+    "package:rick_episodes/features/episodes/data/models/character_model.dart",
+    "package:rick_episodes/features/episodes/data/models/episode_model.dart"
+  ]
+}

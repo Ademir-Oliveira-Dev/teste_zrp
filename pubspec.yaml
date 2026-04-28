@@ -1,0 +1,43 @@
+name: rick_episodes
+description: Rick and Morty episodes app using Clean Architecture, Bloc and Drift.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  equatable: ^2.0.5
+
+  # Network
+  dio: ^5.4.3
+
+  # Local database (offline-first)
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.22
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # Dependency injection
+  get_it: ^7.7.0
+
+  # Functional error handling
+  dartz: ^0.10.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.10
+  drift_dev: ^2.18.0
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true

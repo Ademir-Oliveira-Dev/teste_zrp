@@ -1,0 +1,10 @@
+{
+  "elements": {},
+  "imports": [
+    "package:drift/drift.dart",
+    "package:rick_episodes/core/database/app_database.dart",
+    "package:rick_episodes/core/error/exceptions.dart",
+    "package:rick_episodes/features/episodes/data/models/character_model.dart",
+    "package:rick_episodes/features/episodes/data/models/episode_model.dart"
+  ]
+}

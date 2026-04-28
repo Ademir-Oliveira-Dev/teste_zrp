@@ -1,0 +1,8 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:rick_episodes/core/di/injection_container.dart",
+    "package:rick_episodes/features/episodes/presentation/pages/episodes_page.dart"
+  ]
+}

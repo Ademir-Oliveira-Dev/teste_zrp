@@ -1,0 +1,10 @@
+{
+  "elements": {},
+  "imports": [
+    "package:bloc/bloc.dart",
+    "package:equatable/equatable.dart",
+    "package:rick_episodes/features/favorites/domain/entities/favorite.dart",
+    "package:rick_episodes/features/favorites/domain/usecases/get_favorites.dart",
+    "package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart"
+  ]
+}

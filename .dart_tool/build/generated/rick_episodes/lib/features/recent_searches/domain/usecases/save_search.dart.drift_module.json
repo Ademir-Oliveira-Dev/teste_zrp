@@ -1,0 +1,9 @@
+{
+  "elements": {},
+  "imports": [
+    "package:dartz/dartz.dart",
+    "package:equatable/equatable.dart",
+    "package:rick_episodes/core/error/failures.dart",
+    "package:rick_episodes/features/recent_searches/domain/repositories/recent_searches_repository.dart"
+  ]
+}

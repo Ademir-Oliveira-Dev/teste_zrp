@@ -1,0 +1,7 @@
+{
+  "elements": {},
+  "imports": [
+    "package:dio/dio.dart",
+    "package:rick_episodes/core/error/exceptions.dart"
+  ]
+}
