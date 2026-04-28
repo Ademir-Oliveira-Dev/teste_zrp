@@ -232,7 +232,8 @@ void main() {
 
       final result = await repository.getCharactersByEpisode(tEpisodeId);
 
-      expect(result, const Right(<CharacterEntity>[]));
+      expect(result.isRight(), isTrue);
+      result.fold((_) {}, (chars) => expect(chars, isEmpty));
     });
 
     test('retorna lista vazia quando episódio não tem characterUrls', () async {
@@ -251,7 +252,8 @@ void main() {
 
       final result = await repository.getCharactersByEpisode(tEpisodeId);
 
-      expect(result, const Right(<CharacterEntity>[]));
+      expect(result.isRight(), isTrue);
+      result.fold((_) {}, (chars) => expect(chars, isEmpty));
       verifyNever(() => mockRemote.getCharactersByIds(any()));
     });
   });

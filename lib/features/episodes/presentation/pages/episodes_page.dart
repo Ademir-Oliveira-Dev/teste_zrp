@@ -11,7 +11,7 @@ class EpisodesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<EpisodesCubit>(),
+      create: (_) => sl<EpisodeSearchCubit>()..loadRecentSearches(),
       child: const _EpisodesView(),
     );
   }
@@ -44,26 +44,41 @@ class _EpisodesViewState extends State<_EpisodesView> {
             child: SearchBar(
               controller: _controller,
               hintText: 'Buscar episódio...',
-              onSubmitted: (query) =>
-                  context.read<EpisodesCubit>().search(query),
+              onChanged: (query) =>
+                  context.read<EpisodeSearchCubit>().search(query),
               trailing: [
                 IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () =>
-                      context.read<EpisodesCubit>().search(_controller.text),
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _controller.clear();
+                    context.read<EpisodeSearchCubit>().clearSearch();
+                  },
                 ),
               ],
             ),
           ),
           Expanded(
-            child: BlocBuilder<EpisodesCubit, EpisodesState>(
+            child: BlocBuilder<EpisodeSearchCubit, EpisodeSearchState>(
               builder: (context, state) => switch (state) {
-                EpisodesInitial() => const Center(
-                    child: Text('Busque por um episódio'),
-                  ),
-                EpisodesLoading() =>
+                EpisodeSearchInitial(:final recentSearches) =>
+                  recentSearches.isEmpty
+                      ? const Center(child: Text('Busque por um episódio'))
+                      : ListView.builder(
+                          itemCount: recentSearches.length,
+                          itemBuilder: (_, i) => ListTile(
+                            leading: const Icon(Icons.history),
+                            title: Text(recentSearches[i].query),
+                            onTap: () {
+                              _controller.text = recentSearches[i].query;
+                              context
+                                  .read<EpisodeSearchCubit>()
+                                  .search(recentSearches[i].query);
+                            },
+                          ),
+                        ),
+                EpisodeSearchLoading() =>
                   const Center(child: CircularProgressIndicator()),
-                EpisodesLoaded(:final episodes) => ListView.builder(
+                EpisodeSearchLoaded(:final episodes) => ListView.builder(
                     itemCount: episodes.length,
                     itemBuilder: (context, i) => EpisodeCard(
                       episode: episodes[i],
@@ -76,7 +91,10 @@ class _EpisodesViewState extends State<_EpisodesView> {
                       ),
                     ),
                   ),
-                EpisodesError(:final message) => Center(
+                EpisodeSearchEmpty() => const Center(
+                    child: Text('Nenhum episódio encontrado'),
+                  ),
+                EpisodeSearchError(:final message) => Center(
                     child: Text(message),
                   ),
               },

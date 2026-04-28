@@ -3,7 +3,13 @@ import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
 
 class CharacterTile extends StatelessWidget {
   final CharacterEntity character;
-  const CharacterTile({super.key, required this.character});
+  final VoidCallback? onFavoriteTap;
+
+  const CharacterTile({
+    super.key,
+    required this.character,
+    this.onFavoriteTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +19,24 @@ class CharacterTile extends StatelessWidget {
       ),
       title: Text(character.name),
       subtitle: Text('${character.species} • ${character.status}'),
-      trailing: character.originName.isNotEmpty
-          ? Text(
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (character.originName.isNotEmpty)
+            Text(
               character.originName,
               style: Theme.of(context).textTheme.labelSmall,
               overflow: TextOverflow.ellipsis,
-            )
-          : null,
+            ),
+          IconButton(
+            icon: Icon(
+              character.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: character.isFavorite ? Colors.red : null,
+            ),
+            onPressed: onFavoriteTap,
+          ),
+        ],
+      ),
     );
   }
 }

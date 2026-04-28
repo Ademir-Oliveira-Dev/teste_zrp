@@ -6,20 +6,40 @@ import 'package:rick_episodes/core/error/failures.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 import 'package:rick_episodes/features/episodes/domain/usecases/search_episodes.dart';
 import 'package:rick_episodes/features/episodes/presentation/cubit/episodes_cubit.dart';
+import 'package:rick_episodes/features/recent_searches/domain/entities/recent_search.dart';
+import 'package:rick_episodes/features/recent_searches/domain/usecases/get_recent_searches.dart';
+import 'package:rick_episodes/features/recent_searches/domain/usecases/save_search.dart';
 
 class MockSearchEpisodes extends Mock implements SearchEpisodes {}
+class MockGetRecentSearches extends Mock implements GetRecentSearches {}
+class MockSaveSearch extends Mock implements SaveSearch {}
 
 void main() {
-  late EpisodesCubit cubit;
+  late EpisodeSearchCubit cubit;
   late MockSearchEpisodes mockSearchEpisodes;
+  late MockGetRecentSearches mockGetRecentSearches;
+  late MockSaveSearch mockSaveSearch;
 
   setUpAll(() {
     registerFallbackValue(const SearchEpisodesParams(query: ''));
+    registerFallbackValue(const SaveSearchParams(query: ''));
   });
 
   setUp(() {
     mockSearchEpisodes = MockSearchEpisodes();
-    cubit = EpisodesCubit(searchEpisodes: mockSearchEpisodes);
+    mockGetRecentSearches = MockGetRecentSearches();
+    mockSaveSearch = MockSaveSearch();
+
+    when(() => mockGetRecentSearches())
+        .thenAnswer((_) async => const Right([]));
+    when(() => mockSaveSearch(any())).thenAnswer((_) async => const Right(null));
+
+    cubit = EpisodeSearchCubit(
+      searchEpisodes: mockSearchEpisodes,
+      getRecentSearches: mockGetRecentSearches,
+      saveSearch: mockSaveSearch,
+      debounceDuration: Duration.zero,
+    );
   });
 
   tearDown(() => cubit.close());
@@ -34,63 +54,149 @@ void main() {
     ),
   ];
 
+  final tRecentSearches = [
+    RecentSearchEntity(
+      id: 1,
+      query: 'Pilot',
+      createdAt: DateTime(2024, 1, 1),
+    ),
+  ];
+
   group('search', () {
-    blocTest<EpisodesCubit, EpisodesState>(
-      'emite [Loading, Loaded] quando busca tem sucesso',
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Loading, Loaded] quando busca retorna episódios',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Right(tEpisodes));
         return cubit;
       },
-      act: (cubit) => cubit.search('Pilot'),
+      act: (c) => c.search('Pilot'),
       expect: () => [
-        const EpisodesLoading(),
-        const EpisodesLoaded(tEpisodes),
+        const EpisodeSearchLoading(),
+        const EpisodeSearchLoaded(tEpisodes),
       ],
     );
 
-    blocTest<EpisodesCubit, EpisodesState>(
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Loading, Empty] quando API retorna lista vazia',
+      build: () {
+        when(() => mockSearchEpisodes(any()))
+            .thenAnswer((_) async => const Right([]));
+        return cubit;
+      },
+      act: (c) => c.search('xyz'),
+      expect: () => [
+        const EpisodeSearchLoading(),
+        const EpisodeSearchEmpty(),
+      ],
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
       'emite [Loading, Error] quando busca falha no servidor',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Left(ServerFailure()));
         return cubit;
       },
-      act: (cubit) => cubit.search('Pilot'),
+      act: (c) => c.search('Pilot'),
       expect: () => [
-        const EpisodesLoading(),
-        const EpisodesError('Erro no servidor.'),
+        const EpisodeSearchLoading(),
+        const EpisodeSearchError('Erro no servidor.'),
       ],
     );
 
-    blocTest<EpisodesCubit, EpisodesState>(
-      'não emite nada quando query está vazia',
-      build: () => cubit,
-      act: (cubit) => cubit.search(''),
-      expect: () => [],
-    );
-
-    blocTest<EpisodesCubit, EpisodesState>(
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
       'emite [Loading, Error] quando não há conexão',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Left(NetworkFailure()));
         return cubit;
       },
-      act: (cubit) => cubit.search('Rick'),
+      act: (c) => c.search('Rick'),
       expect: () => [
-        const EpisodesLoading(),
-        const EpisodesError('Sem conexão com a internet.'),
+        const EpisodeSearchLoading(),
+        const EpisodeSearchError('Sem conexão com a internet.'),
       ],
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'chama clearSearch quando query é vazia',
+      build: () => cubit,
+      act: (c) => c.search(''),
+      expect: () => [const EpisodeSearchInitial()],
+      verify: (_) => verifyNever(() => mockSearchEpisodes(any())),
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'salva busca após resultado bem-sucedido',
+      build: () {
+        when(() => mockSearchEpisodes(any()))
+            .thenAnswer((_) async => const Right(tEpisodes));
+        return cubit;
+      },
+      act: (c) => c.search('Pilot'),
+      verify: (_) => verify(
+        () => mockSaveSearch(const SaveSearchParams(query: 'Pilot')),
+      ).called(1),
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'não salva busca quando API retorna lista vazia',
+      build: () {
+        when(() => mockSearchEpisodes(any()))
+            .thenAnswer((_) async => const Right([]));
+        return cubit;
+      },
+      act: (c) => c.search('xyz'),
+      verify: (_) => verifyNever(() => mockSaveSearch(any())),
     );
   });
 
-  group('reset', () {
-    blocTest<EpisodesCubit, EpisodesState>(
-      'emite [Initial] ao chamar reset',
-      build: () => cubit,
-      act: (cubit) => cubit.reset(),
-      expect: () => [const EpisodesInitial()],
+  group('loadRecentSearches', () {
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Initial com buscas recentes] quando há histórico',
+      build: () {
+        when(() => mockGetRecentSearches())
+            .thenAnswer((_) async => Right(tRecentSearches));
+        return cubit;
+      },
+      act: (c) => c.loadRecentSearches(),
+      expect: () => [EpisodeSearchInitial(recentSearches: tRecentSearches)],
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Initial vazio] quando não há histórico',
+      build: () {
+        when(() => mockGetRecentSearches())
+            .thenAnswer((_) async => const Right([]));
+        return cubit;
+      },
+      act: (c) => c.loadRecentSearches(),
+      expect: () => [const EpisodeSearchInitial()],
+    );
+
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Initial vazio] quando GetRecentSearches falha',
+      build: () {
+        when(() => mockGetRecentSearches())
+            .thenAnswer((_) async => const Left(CacheFailure()));
+        return cubit;
+      },
+      act: (c) => c.loadRecentSearches(),
+      expect: () => [const EpisodeSearchInitial()],
+    );
+  });
+
+  group('clearSearch', () {
+    blocTest<EpisodeSearchCubit, EpisodeSearchState>(
+      'emite [Initial] e carrega buscas recentes',
+      build: () {
+        when(() => mockGetRecentSearches())
+            .thenAnswer((_) async => Right(tRecentSearches));
+        return cubit;
+      },
+      act: (c) => c.clearSearch(),
+      expect: () => [EpisodeSearchInitial(recentSearches: tRecentSearches)],
     );
   });
 }

@@ -3,27 +3,51 @@ import 'package:equatable/equatable.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 import 'package:rick_episodes/features/episodes/domain/usecases/get_characters_by_episode.dart';
+import 'package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart';
 
 part 'episode_detail_state.dart';
 
-class EpisodeDetailCubit extends Cubit<EpisodeDetailState> {
+class EpisodeDetailsCubit extends Cubit<EpisodeDetailsState> {
   final GetCharactersByEpisode getCharacters;
+  final ToggleFavorite toggleFavoriteUseCase;
 
-  EpisodeDetailCubit({required this.getCharacters})
-      : super(const EpisodeDetailInitial());
+  EpisodeDetailsCubit({
+    required this.getCharacters,
+    required this.toggleFavoriteUseCase,
+  }) : super(const EpisodeDetailsInitial());
 
-  Future<void> loadDetail(EpisodeEntity episode) async {
-    emit(const EpisodeDetailLoading());
+  Future<void> loadCharacters(EpisodeEntity episode) async {
+    emit(const EpisodeDetailsLoading());
+    final result =
+        await getCharacters(GetCharactersParams(episodeId: episode.id));
+    result.fold(
+      (failure) => emit(EpisodeDetailsError(failure.message)),
+      (characters) =>
+          emit(EpisodeDetailsLoaded(episode: episode, characters: characters)),
+    );
+  }
 
-    final result = await getCharacters(
-      GetCharactersParams(episodeId: episode.id),
+  Future<void> toggleFavorite(CharacterEntity character) async {
+    final current = state;
+    if (current is! EpisodeDetailsLoaded) return;
+
+    final result = await toggleFavoriteUseCase(
+      ToggleFavoriteParams(
+        episodeId: character.id,
+        isFavorite: character.isFavorite,
+      ),
     );
 
     result.fold(
-      (failure) => emit(EpisodeDetailError(failure.message)),
-      (characters) => emit(
-        EpisodeDetailLoaded(episode: episode, characters: characters),
-      ),
+      (_) {},
+      (_) {
+        final updated = current.characters.map((c) {
+          return c.id == character.id
+              ? c.copyWith(isFavorite: !character.isFavorite)
+              : c;
+        }).toList();
+        emit(current.copyWith(characters: updated));
+      },
     );
   }
 }

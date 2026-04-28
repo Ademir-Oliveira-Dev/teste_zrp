@@ -61,8 +61,15 @@ void _registerEpisodes() {
   sl.registerLazySingleton(() => GetCharactersByEpisode(sl()));
 
   // Cubits (factory: nova instância por página)
-  sl.registerFactory(() => EpisodesCubit(searchEpisodes: sl()));
-  sl.registerFactory(() => EpisodeDetailCubit(getCharacters: sl()));
+  sl.registerFactory(() => EpisodeSearchCubit(
+        searchEpisodes: sl(),
+        getRecentSearches: sl(),
+        saveSearch: sl(),
+      ));
+  sl.registerFactory(() => EpisodeDetailsCubit(
+        getCharacters: sl(),
+        toggleFavoriteUseCase: sl(),
+      ));
 }
 
 void _registerFavorites() {
