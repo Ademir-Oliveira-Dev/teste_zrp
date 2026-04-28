@@ -11,7 +11,9 @@ import 'package:rick_episodes/features/recent_searches/domain/usecases/get_recen
 import 'package:rick_episodes/features/recent_searches/domain/usecases/save_search.dart';
 
 class MockSearchEpisodes extends Mock implements SearchEpisodes {}
+
 class MockGetRecentSearches extends Mock implements GetRecentSearches {}
+
 class MockSaveSearch extends Mock implements SaveSearch {}
 
 void main() {
@@ -32,7 +34,8 @@ void main() {
 
     when(() => mockGetRecentSearches())
         .thenAnswer((_) async => const Right([]));
-    when(() => mockSaveSearch(any())).thenAnswer((_) async => const Right(null));
+    when(() => mockSaveSearch(any()))
+        .thenAnswer((_) async => const Right(null));
 
     cubit = EpisodeSearchCubit(
       searchEpisodes: mockSearchEpisodes,
@@ -62,9 +65,13 @@ void main() {
     ),
   ];
 
-  group('search', () {
+  test('estado inicial deve ser EpisodeSearchInitial', () {
+    expect(cubit.state, const EpisodeSearchInitial());
+  });
+
+  group('searchEpisodes', () {
     blocTest<EpisodeSearchCubit, EpisodeSearchState>(
-      'emite [Loading, Loaded] quando busca retorna episódios',
+      'deve emitir [Loading, Loaded]',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Right(tEpisodes));
@@ -78,7 +85,7 @@ void main() {
     );
 
     blocTest<EpisodeSearchCubit, EpisodeSearchState>(
-      'emite [Loading, Empty] quando API retorna lista vazia',
+      'deve emitir [Loading, Empty] quando lista vier vazia',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Right([]));
@@ -92,7 +99,7 @@ void main() {
     );
 
     blocTest<EpisodeSearchCubit, EpisodeSearchState>(
-      'emite [Loading, Error] quando busca falha no servidor',
+      'deve emitir [Loading, Error] em caso de falha',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Left(ServerFailure()));
@@ -189,7 +196,7 @@ void main() {
 
   group('clearSearch', () {
     blocTest<EpisodeSearchCubit, EpisodeSearchState>(
-      'emite [Initial] e carrega buscas recentes',
+      'deve voltar para Initial',
       build: () {
         when(() => mockGetRecentSearches())
             .thenAnswer((_) async => Right(tRecentSearches));

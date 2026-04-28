@@ -9,7 +9,9 @@ import 'package:rick_episodes/features/episodes/domain/usecases/get_characters_b
 import 'package:rick_episodes/features/episodes/presentation/cubit/episode_detail_cubit.dart';
 import 'package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart';
 
-class MockGetCharactersByEpisode extends Mock implements GetCharactersByEpisode {}
+class MockGetCharactersByEpisode extends Mock
+    implements GetCharactersByEpisode {}
+
 class MockToggleFavorite extends Mock implements ToggleFavorite {}
 
 void main() {
@@ -65,7 +67,7 @@ void main() {
 
   group('loadCharacters', () {
     blocTest<EpisodeDetailsCubit, EpisodeDetailsState>(
-      'emite [Loading, Loaded] quando personagens são carregados com sucesso',
+      'deve emitir [Loading, Loaded]',
       build: () {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => const Right([tCharacter]));
@@ -79,7 +81,7 @@ void main() {
     );
 
     blocTest<EpisodeDetailsCubit, EpisodeDetailsState>(
-      'emite [Loading, Error] quando o repositório falha',
+      'deve emitir [Loading, Error] em falha',
       build: () {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => const Left(ServerFailure('503')));
@@ -109,7 +111,7 @@ void main() {
 
   group('toggleFavorite', () {
     blocTest<EpisodeDetailsCubit, EpisodeDetailsState>(
-      'atualiza isFavorite para true quando personagem ainda não é favorito',
+      'deve atualizar personagem favorito no estado atual',
       build: () {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => const Right([tCharacter]));
