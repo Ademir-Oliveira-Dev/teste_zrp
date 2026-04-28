@@ -16,11 +16,11 @@ final class FavoritesLoading extends FavoritesState {
 }
 
 final class FavoritesLoaded extends FavoritesState {
-  final List<Favorite> favorites;
-  const FavoritesLoaded(this.favorites);
+  final List<CharacterEntity> characters;
+  const FavoritesLoaded(this.characters);
 
   @override
-  List<Object?> get props => [favorites];
+  List<Object?> get props => [characters];
 }
 
 final class FavoritesError extends FavoritesState {

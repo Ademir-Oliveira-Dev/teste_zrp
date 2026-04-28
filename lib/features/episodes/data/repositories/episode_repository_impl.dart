@@ -70,6 +70,18 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   }
 
   @override
+  Future<Either<Failure, List<CharacterEntity>>> getFavoriteCharacters() async {
+    try {
+      final models = await local.getFavorites();
+      return Right(models.map((m) => m.toEntity(isFavorite: true)).toList());
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } catch (e) {
+      return Left(CacheFailure('Erro inesperado: $e'));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<CharacterEntity>>> getCharactersByEpisode(
     int episodeId,
   ) async {
@@ -147,7 +159,9 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   Future<void> _safeCacheEpisodes(List<EpisodeModel> models) async {
     try {
       await local.cacheEpisodes(models);
-    } on CacheException { }
+    } on CacheException {
+      // Silently ignored: cache write failure must not break the main flow.
+    }
   }
 
   Future<List<CharacterModel>> _safeGetCachedCharacters(int episodeId) async {
@@ -164,6 +178,8 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   ) async {
     try {
       await local.cacheCharactersForEpisode(episodeId, models);
-    } on CacheException { }
+    } on CacheException {
+      // Silently ignored: cache write failure must not break the main flow.
+    }
   }
 }

@@ -1,32 +1,32 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rick_episodes/features/favorites/domain/entities/favorite.dart';
-import 'package:rick_episodes/features/favorites/domain/usecases/get_favorites.dart';
+import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
+import 'package:rick_episodes/features/episodes/domain/usecases/get_favorite_characters.dart';
 import 'package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart';
 
 part 'favorites_state.dart';
 
 class FavoritesCubit extends Cubit<FavoritesState> {
-  final GetFavorites getFavorites;
+  final GetFavoriteCharacters getFavoriteCharacters;
   final ToggleFavorite toggleFavorite;
 
   FavoritesCubit({
-    required this.getFavorites,
+    required this.getFavoriteCharacters,
     required this.toggleFavorite,
   }) : super(const FavoritesInitial());
 
   Future<void> load() async {
     emit(const FavoritesLoading());
-    final result = await getFavorites();
+    final result = await getFavoriteCharacters();
     result.fold(
       (failure) => emit(FavoritesError(failure.message)),
-      (favorites) => emit(FavoritesLoaded(favorites)),
+      (characters) => emit(FavoritesLoaded(characters)),
     );
   }
 
-  Future<void> toggle(int episodeId, {required bool isFavorite}) async {
+  Future<void> remove(CharacterEntity character) async {
     final result = await toggleFavorite(
-      ToggleFavoriteParams(episodeId: episodeId, isFavorite: isFavorite),
+      ToggleFavoriteParams(episodeId: character.id, isFavorite: true),
     );
     result.fold(
       (failure) => emit(FavoritesError(failure.message)),

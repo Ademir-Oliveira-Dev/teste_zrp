@@ -6,9 +6,6 @@ import 'package:rick_episodes/features/favorites/data/datasources/favorites_loca
 import 'package:rick_episodes/features/favorites/domain/entities/favorite.dart';
 import 'package:rick_episodes/features/favorites/domain/repositories/favorites_repository.dart';
 
-// TODO: o schema agora rastreia characterId (não mais episodeId).
-// A entidade Favorite e o FavoritesRepository devem ser atualizados para
-// refletir favoritos de personagens em uma futura iteração de domínio.
 class FavoritesRepositoryImpl implements FavoritesRepository {
   final FavoritesLocalDatasource datasource;
   const FavoritesRepositoryImpl(this.datasource);
