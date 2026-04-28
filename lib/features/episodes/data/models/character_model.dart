@@ -54,10 +54,11 @@ class CharacterModel {
       name: data.name,
       status: data.status,
       species: data.species,
-      gender: data.gender,
+      // gender e url não são persistidos no banco.
+      gender: '',
       image: data.image,
       originName: data.originName,
-      url: data.url,
+      url: '',
     );
   }
 
@@ -67,15 +68,11 @@ class CharacterModel {
       name: name,
       status: status,
       species: species,
-      gender: gender,
       image: image,
       originName: originName,
-      url: url,
-      cachedAt: DateTime.now(),
     );
   }
 
-  // isFavorite é um estado computado externamente — não vem da API nem do DB.
   CharacterEntity toEntity({bool isFavorite = false}) {
     return CharacterEntity(
       id: id,

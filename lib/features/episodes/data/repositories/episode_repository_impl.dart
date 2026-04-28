@@ -33,7 +33,7 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
       }
     }
     try {
-      final models = await local.getCachedEpisodes(query);
+      final models = await local.getCachedEpisodesByQuery(query);
       return Right(models.map((m) => m.toEntity()).toList());
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
@@ -49,10 +49,12 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
         return Right(model.toEntity());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
       }
     }
     try {
-      final models = await local.getCachedEpisodes('');
+      final models = await local.getCachedEpisodesByQuery('');
       final model = models.firstWhere(
         (m) => m.id == id,
         orElse: () => throw const CacheException('Episódio não encontrado no cache.'),
@@ -67,28 +69,33 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   Future<Either<Failure, List<CharacterEntity>>> getCharactersByEpisode(
     int episodeId,
   ) async {
-    final episodeResult = await getEpisodeById(episodeId);
-    return episodeResult.fold(Left.new, (episode) async {
-      final ids = episode.characterUrls
-          .map((url) => int.tryParse(url.split('/').last) ?? 0)
-          .where((id) => id > 0)
-          .toList();
-
-      if (await networkInfo.isConnected) {
-        try {
-          final models = await remote.getCharactersByIds(ids);
-          await local.cacheCharacters(models);
-          return Right(models.map((m) => m.toEntity()).toList());
-        } on ServerException catch (e) {
-          return Left(ServerFailure(e.message));
-        }
-      }
+    if (await networkInfo.isConnected) {
       try {
-        final models = await local.getCachedCharacters(ids);
-        return Right(models.map((m) => m.toEntity()).toList());
-      } on CacheException catch (e) {
-        return Left(CacheFailure(e.message));
+        // Busca o episódio para obter as characterUrls (só disponíveis via API)
+        final episodeResult = await getEpisodeById(episodeId);
+        return episodeResult.fold(Left.new, (episode) async {
+          final ids = episode.characterUrls
+              .map((url) => int.tryParse(url.split('/').last) ?? 0)
+              .where((id) => id > 0)
+              .toList();
+
+          final models = await remote.getCharactersByIds(ids);
+          // Persiste os personagens e o vínculo episódio→personagem
+          await local.cacheCharactersForEpisode(episodeId, models);
+          return Right(models.map((m) => m.toEntity()).toList());
+        });
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
       }
-    });
+    }
+    // Offline: consulta a tabela episode_characters via join
+    try {
+      final models = await local.getCachedCharactersByEpisode(episodeId);
+      return Right(models.map((m) => m.toEntity()).toList());
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    }
   }
 }

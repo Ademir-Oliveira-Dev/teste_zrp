@@ -15,8 +15,6 @@ class EpisodesTable extends Table {
   TextColumn get name => text()();
   TextColumn get airDate => text()();
   TextColumn get episodeCode => text()();
-  TextColumn get characterUrls => text()(); // JSON-encoded List<String>
-  DateTimeColumn get cachedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -27,22 +25,28 @@ class CharactersTable extends Table {
   TextColumn get name => text()();
   TextColumn get status => text()();
   TextColumn get species => text()();
-  TextColumn get gender => text()();
   TextColumn get image => text()();
   TextColumn get originName => text()();
-  TextColumn get url => text()();
-  DateTimeColumn get cachedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
-class FavoritesTable extends Table {
+/// Tabela de junção N:N entre episódios e personagens.
+class EpisodeCharactersTable extends Table {
   IntColumn get episodeId => integer()();
-  DateTimeColumn get savedAt => dateTime()();
+  IntColumn get characterId => integer()();
 
   @override
-  Set<Column> get primaryKey => {episodeId};
+  Set<Column> get primaryKey => {episodeId, characterId};
+}
+
+class FavoritesTable extends Table {
+  IntColumn get characterId => integer()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {characterId};
 }
 
 class RecentSearchesTable extends Table {
@@ -59,6 +63,7 @@ class RecentSearchesTable extends Table {
   tables: [
     EpisodesTable,
     CharactersTable,
+    EpisodeCharactersTable,
     FavoritesTable,
     RecentSearchesTable,
   ],
@@ -69,7 +74,19 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          // Dev-only: recria todas as tabelas ao atualizar o schema.
+          for (final table in allTables) {
+            await m.drop(table);
+            await m.create(table);
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

@@ -81,7 +81,7 @@ void main() {
     });
 
     test('retorna entidades do cache quando offline', () async {
-      when(() => mockLocal.getCachedEpisodes(tQuery))
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
           .thenAnswer((_) async => [tModel]);
 
       final result = await repository.searchEpisodes(tQuery);
@@ -92,7 +92,7 @@ void main() {
     });
 
     test('retorna CacheFailure quando cache falha offline', () async {
-      when(() => mockLocal.getCachedEpisodes(tQuery))
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
           .thenThrow(const CacheException('db error'));
 
       final result = await repository.searchEpisodes(tQuery);

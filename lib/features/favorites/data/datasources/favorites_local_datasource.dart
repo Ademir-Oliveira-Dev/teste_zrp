@@ -4,9 +4,9 @@ import 'package:rick_episodes/core/error/exceptions.dart';
 
 abstract class FavoritesLocalDatasource {
   Future<List<FavoritesTableData>> getFavorites();
-  Future<void> addFavorite(int episodeId);
-  Future<void> removeFavorite(int episodeId);
-  Future<bool> isFavorite(int episodeId);
+  Future<void> addFavorite(int characterId);
+  Future<void> removeFavorite(int characterId);
+  Future<bool> isFavorite(int characterId);
 }
 
 class FavoritesLocalDatasourceImpl implements FavoritesLocalDatasource {
@@ -16,19 +16,21 @@ class FavoritesLocalDatasourceImpl implements FavoritesLocalDatasource {
   @override
   Future<List<FavoritesTableData>> getFavorites() async {
     try {
-      return db.select(db.favoritesTable).get();
+      return (db.select(db.favoritesTable)
+            ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+          .get();
     } catch (e) {
       throw CacheException('Falha ao buscar favoritos: $e');
     }
   }
 
   @override
-  Future<void> addFavorite(int episodeId) async {
+  Future<void> addFavorite(int characterId) async {
     try {
       await db.into(db.favoritesTable).insert(
             FavoritesTableCompanion.insert(
-              episodeId: Value(episodeId),
-              savedAt: DateTime.now(),
+              characterId: Value(characterId),
+              createdAt: DateTime.now(),
             ),
           );
     } catch (e) {
@@ -37,10 +39,10 @@ class FavoritesLocalDatasourceImpl implements FavoritesLocalDatasource {
   }
 
   @override
-  Future<void> removeFavorite(int episodeId) async {
+  Future<void> removeFavorite(int characterId) async {
     try {
       await (db.delete(db.favoritesTable)
-            ..where((t) => t.episodeId.equals(episodeId)))
+            ..where((t) => t.characterId.equals(characterId)))
           .go();
     } catch (e) {
       throw CacheException('Falha ao remover favorito: $e');
@@ -48,9 +50,9 @@ class FavoritesLocalDatasourceImpl implements FavoritesLocalDatasource {
   }
 
   @override
-  Future<bool> isFavorite(int episodeId) async {
+  Future<bool> isFavorite(int characterId) async {
     final row = await (db.select(db.favoritesTable)
-          ..where((t) => t.episodeId.equals(episodeId)))
+          ..where((t) => t.characterId.equals(characterId)))
         .getSingleOrNull();
     return row != null;
   }
