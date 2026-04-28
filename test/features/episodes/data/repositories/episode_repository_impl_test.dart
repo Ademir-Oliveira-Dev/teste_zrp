@@ -6,8 +6,10 @@ import 'package:rick_episodes/core/error/failures.dart';
 import 'package:rick_episodes/core/network/network_info.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_local_datasource.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_remote_datasource.dart';
+import 'package:rick_episodes/features/episodes/data/models/character_model.dart';
 import 'package:rick_episodes/features/episodes/data/models/episode_model.dart';
 import 'package:rick_episodes/features/episodes/data/repositories/episode_repository_impl.dart';
+import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 
 class MockRemote extends Mock implements EpisodeRemoteDatasource {}
@@ -32,72 +34,225 @@ void main() {
   });
 
   const tQuery = 'Pilot';
-  const tModel = EpisodeModel(
-    id: 1,
+  const tEpisodeId = 1;
+
+  const tEpisodeModel = EpisodeModel(
+    id: tEpisodeId,
     name: 'Pilot',
     airDate: 'December 2, 2013',
     episodeCode: 'S01E01',
-    characterUrls: ['https://rickandmortyapi.com/api/character/1'],
-  );
-  const tEntity = EpisodeEntity(
-    id: 1,
-    name: 'Pilot',
-    airDate: 'December 2, 2013',
-    episodeCode: 'S01E01',
-    characterUrls: ['https://rickandmortyapi.com/api/character/1'],
+    characterUrls: [
+      'https://rickandmortyapi.com/api/character/1',
+      'https://rickandmortyapi.com/api/character/2',
+    ],
   );
 
-  group('searchEpisodes — online', () {
-    setUp(() {
-      when(() => mockNetwork.isConnected).thenAnswer((_) async => true);
+  const tEpisodeEntity = EpisodeEntity(
+    id: tEpisodeId,
+    name: 'Pilot',
+    airDate: 'December 2, 2013',
+    episodeCode: 'S01E01',
+    characterUrls: [
+      'https://rickandmortyapi.com/api/character/1',
+      'https://rickandmortyapi.com/api/character/2',
+    ],
+  );
+
+  const tCharacterModel = CharacterModel(
+    id: 1,
+    name: 'Rick Sanchez',
+    status: 'Alive',
+    species: 'Human',
+    gender: 'Male',
+    image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+    originName: 'Earth (C-137)',
+    url: 'https://rickandmortyapi.com/api/character/1',
+  );
+
+  const tCharacterEntity = CharacterEntity(
+    id: 1,
+    name: 'Rick Sanchez',
+    status: 'Alive',
+    species: 'Human',
+    image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+    originName: 'Earth (C-137)',
+    isFavorite: false,
+  );
+
+  group('searchEpisodes — cache-first', () {
+    test('retorna cache imediatamente quando há dados locais (sem rede)', () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenAnswer((_) async => [tEpisodeModel]);
+
+      final result = await repository.searchEpisodes(tQuery);
+
+      expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
+      expect(result.getOrElse(() => []), [tEpisodeEntity]);
+      verifyNever(() => mockRemote.searchEpisodes(any()));
     });
 
-    test('retorna lista de entidades do remote e salva no cache', () async {
+    test('busca na API quando cache está vazio, atualiza cache e retorna', () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenAnswer((_) async => []);
       when(() => mockRemote.searchEpisodes(tQuery))
-          .thenAnswer((_) async => [tModel]);
+          .thenAnswer((_) async => [tEpisodeModel]);
       when(() => mockLocal.cacheEpisodes(any())).thenAnswer((_) async {});
 
       final result = await repository.searchEpisodes(tQuery);
 
       expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
-      expect(result.getOrElse(() => <EpisodeEntity>[]), [tEntity]);
-      verify(() => mockLocal.cacheEpisodes([tModel])).called(1);
+      expect(result.getOrElse(() => []), [tEpisodeEntity]);
+      verify(() => mockLocal.cacheEpisodes([tEpisodeModel])).called(1);
     });
 
-    test('retorna ServerFailure quando remote lança ServerException', () async {
+    test('não chama cacheEpisodes quando a API retorna lista vazia', () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.searchEpisodes(tQuery))
+          .thenAnswer((_) async => []);
+
+      await repository.searchEpisodes(tQuery);
+
+      verifyNever(() => mockLocal.cacheEpisodes(any()));
+    });
+
+    test('retorna ServerFailure quando cache vazio e API lança ServerException',
+        () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenAnswer((_) async => []);
       when(() => mockRemote.searchEpisodes(tQuery))
           .thenThrow(const ServerException('500'));
 
       final result = await repository.searchEpisodes(tQuery);
 
       expect(result, const Left(ServerFailure('500')));
-      verifyNever(() => mockLocal.cacheEpisodes(any()));
+    });
+
+    test('retorna NetworkFailure quando cache vazio e sem conexão', () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.searchEpisodes(tQuery))
+          .thenThrow(const NetworkException());
+
+      final result = await repository.searchEpisodes(tQuery);
+
+      expect(result, isA<Left<Failure, List<EpisodeEntity>>>());
+      result.fold(
+        (f) => expect(f, isA<NetworkFailure>()),
+        (_) => fail('expected Left'),
+      );
+    });
+
+    test('falha de cache não interrompe o fluxo principal', () async {
+      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
+          .thenThrow(const CacheException('db error'));
+      when(() => mockRemote.searchEpisodes(tQuery))
+          .thenAnswer((_) async => [tEpisodeModel]);
+      when(() => mockLocal.cacheEpisodes(any())).thenAnswer((_) async {});
+
+      final result = await repository.searchEpisodes(tQuery);
+
+      // CacheException foi absorvida; resultado vem da API
+      expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
     });
   });
 
-  group('searchEpisodes — offline', () {
+  group('getCharactersByEpisode — refresh-always', () {
     setUp(() {
-      when(() => mockNetwork.isConnected).thenAnswer((_) async => false);
+      // Sem favoritos por padrão
+      when(() => mockLocal.getFavorites()).thenAnswer((_) async => []);
     });
 
-    test('retorna entidades do cache quando offline', () async {
-      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
-          .thenAnswer((_) async => [tModel]);
+    test('busca na API, salva cache e retorna com isFavorite marcado', () async {
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenAnswer((_) async => tEpisodeModel);
+      when(() => mockRemote.getCharactersByIds([1, 2]))
+          .thenAnswer((_) async => [tCharacterModel]);
+      when(() => mockLocal.cacheCharactersForEpisode(any(), any()))
+          .thenAnswer((_) async {});
 
-      final result = await repository.searchEpisodes(tQuery);
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
 
-      expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
-      expect(result.getOrElse(() => <EpisodeEntity>[]), [tEntity]);
-      verifyNever(() => mockRemote.searchEpisodes(any()));
+      expect(result, isA<Right<Failure, List<CharacterEntity>>>());
+      expect(result.getOrElse(() => []), [tCharacterEntity]);
+      verify(() => mockLocal.cacheCharactersForEpisode(tEpisodeId, [tCharacterModel]))
+          .called(1);
     });
 
-    test('retorna CacheFailure quando cache falha offline', () async {
-      when(() => mockLocal.getCachedEpisodesByQuery(tQuery))
-          .thenThrow(const CacheException('db error'));
+    test('marca isFavorite: true quando personagem está em favoritos', () async {
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenAnswer((_) async => tEpisodeModel);
+      when(() => mockRemote.getCharactersByIds(any()))
+          .thenAnswer((_) async => [tCharacterModel]);
+      when(() => mockLocal.cacheCharactersForEpisode(any(), any()))
+          .thenAnswer((_) async {});
+      when(() => mockLocal.getFavorites())
+          .thenAnswer((_) async => [tCharacterModel]); // personagem é favorito
 
-      final result = await repository.searchEpisodes(tQuery);
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
 
-      expect(result, const Left(CacheFailure('db error')));
+      final characters = result.getOrElse(() => []);
+      expect(characters.first.isFavorite, isTrue);
+    });
+
+    test('retorna cache quando API falha (NetworkException)', () async {
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => [tCharacterModel]);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenThrow(const NetworkException());
+
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
+
+      expect(result, isA<Right<Failure, List<CharacterEntity>>>());
+      expect(result.getOrElse(() => []), [tCharacterEntity]);
+      verifyNever(() => mockLocal.cacheCharactersForEpisode(any(), any()));
+    });
+
+    test('retorna cache quando API falha (ServerException)', () async {
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => [tCharacterModel]);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenThrow(const ServerException('503'));
+
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
+
+      expect(result, isA<Right<Failure, List<CharacterEntity>>>());
+    });
+
+    test('retorna lista vazia quando API falha e cache também está vazio',
+        () async {
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenThrow(const NetworkException());
+
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
+
+      expect(result, const Right(<CharacterEntity>[]));
+    });
+
+    test('retorna lista vazia quando episódio não tem characterUrls', () async {
+      const emptyUrlsEpisode = EpisodeModel(
+        id: tEpisodeId,
+        name: 'Pilot',
+        airDate: '',
+        episodeCode: 'S01E01',
+        characterUrls: [],
+      );
+
+      when(() => mockLocal.getCachedCharactersByEpisode(tEpisodeId))
+          .thenAnswer((_) async => []);
+      when(() => mockRemote.getEpisodeById(tEpisodeId))
+          .thenAnswer((_) async => emptyUrlsEpisode);
+
+      final result = await repository.getCharactersByEpisode(tEpisodeId);
+
+      expect(result, const Right(<CharacterEntity>[]));
+      verifyNever(() => mockRemote.getCharactersByIds(any()));
     });
   });
 }
