@@ -7,7 +7,7 @@ class GetRecentSearches {
   final RecentSearchesRepository repository;
   const GetRecentSearches(this.repository);
 
-  Future<Either<Failure, List<RecentSearch>>> call() {
+  Future<Either<Failure, List<RecentSearchEntity>>> call() {
     return repository.getRecentSearches();
   }
 }

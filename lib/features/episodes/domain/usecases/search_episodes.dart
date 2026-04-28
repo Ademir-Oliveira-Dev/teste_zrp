@@ -8,7 +8,7 @@ class SearchEpisodes {
   final EpisodeRepository repository;
   const SearchEpisodes(this.repository);
 
-  Future<Either<Failure, List<Episode>>> call(SearchEpisodesParams params) {
+  Future<Either<Failure, List<EpisodeEntity>>> call(SearchEpisodesParams params) {
     return repository.searchEpisodes(params.query);
   }
 }

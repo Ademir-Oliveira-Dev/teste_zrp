@@ -4,6 +4,8 @@ import 'package:rick_episodes/core/error/failures.dart';
 import 'package:rick_episodes/core/network/network_info.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_local_datasource.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_remote_datasource.dart';
+import 'package:rick_episodes/features/episodes/data/models/character_model.dart';
+import 'package:rick_episodes/features/episodes/data/models/episode_model.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 import 'package:rick_episodes/features/episodes/domain/repositories/episode_repository.dart';
@@ -20,77 +22,161 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   });
 
   @override
-  Future<Either<Failure, List<Episode>>> searchEpisodes(String query) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final episodes = await remote.searchEpisodes(query);
-        await local.cacheEpisodes(episodes);
-        return Right(episodes);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      }
-    }
-    // Offline-first: retorna do cache
+  Future<Either<Failure, List<EpisodeEntity>>> searchEpisodes(
+    String query,
+  ) async {
     try {
-      final cached = await local.getCachedEpisodes(query);
-      return Right(cached);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      final models = await remote.searchEpisodes(query);
+
+      if (models.isNotEmpty) {
+        await _safeCacheEpisodes(models);
+      }
+
+      return Right(_toEpisodeEntities(models));
+    } on AppException catch (e) {
+      final cached = await _safeGetCachedEpisodes(query);
+      if (cached.isNotEmpty) {
+        return Right(_toEpisodeEntities(cached));
+      }
+      return Left(_toFailure(e));
+    } catch (e) {
+      final cached = await _safeGetCachedEpisodes(query);
+      if (cached.isNotEmpty) {
+        return Right(_toEpisodeEntities(cached));
+      }
+      return Left(ServerFailure('Erro inesperado: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, Episode>> getEpisodeById(int id) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final episode = await remote.getEpisodeById(id);
-        await local.cacheEpisodes([episode]);
-        return Right(episode);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      }
-    }
+  Future<Either<Failure, EpisodeEntity>> getEpisodeById(int id) async {
+    final cached = await _safeGetCachedEpisodes('');
+    final hit = cached.where((m) => m.id == id).firstOrNull;
+
+    if (hit != null) return Right(hit.toEntity());
+
     try {
-      final cached = await local.getCachedEpisodes('');
-      final episode = cached.firstWhere(
-        (e) => e.id == id,
-        orElse: () => throw const CacheException('Episódio não encontrado no cache.'),
-      );
-      return Right(episode);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      final model = await remote.getEpisodeById(id);
+      await _safeCacheEpisodes([model]);
+      return Right(model.toEntity());
+    } on AppException catch (e) {
+      return Left(_toFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Erro inesperado: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, List<Character>>> getCharactersByEpisode(
+  Future<Either<Failure, List<CharacterEntity>>> getFavoriteCharacters() async {
+    try {
+      final models = await local.getFavorites();
+      return Right(models.map((m) => m.toEntity(isFavorite: true)).toList());
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } catch (e) {
+      return Left(CacheFailure('Erro inesperado: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CharacterEntity>>> getCharactersByEpisode(
     int episodeId,
   ) async {
-    // Busca o episódio para obter as URLs dos personagens
-    final episodeResult = await getEpisodeById(episodeId);
-    return episodeResult.fold(Left.new, (episode) async {
-      final ids = episode.characters
-          .map((url) => int.tryParse(url.split('/').last) ?? 0)
-          .where((id) => id > 0)
-          .toList();
+    // 1. Lê do cache (fallback).
+    final cached = await _safeGetCachedCharacters(episodeId);
 
-      if (await networkInfo.isConnected) {
-        try {
-          final characters = await remote.getCharactersByIds(ids);
-          await local.cacheCharacters(characters);
-          return Right(characters);
-        } on ServerException catch (e) {
-          return Left(ServerFailure(e.message));
-        }
+    // 2. Tenta refresh via API.
+    try {
+      final episodeModel = await remote.getEpisodeById(episodeId);
+      final ids = _extractCharacterIds(episodeModel.characterUrls);
+
+      if (ids.isEmpty) {
+        return Right(await _withFavoriteStatus(cached));
       }
-      try {
-        final cached = await local.getCachedCharacters(ids);
-        return Right(cached);
-      } on CacheException catch (e) {
-        return Left(CacheFailure(e.message));
+
+      final remoteModels = await remote.getCharactersByIds(ids);
+
+      // 3. Persiste personagens e vínculo episódio→personagem.
+      if (remoteModels.isNotEmpty) {
+        await _safeCacheCharacters(episodeId, remoteModels);
       }
-    });
+
+      // 4. Marca isFavorite e retorna dados frescos.
+      return Right(await _withFavoriteStatus(remoteModels));
+    } on AppException {
+      // 5. API falhou → cai no fallback abaixo.
+    } catch (_) {
+      // Erro inesperado → cai no fallback também.
+    }
+
+    // 5. Retorna cache com isFavorite marcado.
+    return Right(await _withFavoriteStatus(cached));
+  }
+
+  Future<List<CharacterEntity>> _withFavoriteStatus(
+    List<CharacterModel> models,
+  ) async {
+    if (models.isEmpty) return [];
+    try {
+      final favorites = await local.getFavorites();
+      final favoriteIds = favorites.map((m) => m.id).toSet();
+      return models
+          .map((m) => m.toEntity(isFavorite: favoriteIds.contains(m.id)))
+          .toList();
+    } on CacheException {
+      return models.map((m) => m.toEntity()).toList();
+    }
+  }
+
+  static List<int> _extractCharacterIds(List<String> urls) {
+    return urls
+        .map((url) => int.tryParse(url.split('/').last) ?? 0)
+        .where((id) => id > 0)
+        .toList();
+  }
+
+  static Failure _toFailure(AppException e) => switch (e) {
+        NetworkException() => NetworkFailure(e.message),
+        ServerException() => ServerFailure(e.message),
+        CacheException() => CacheFailure(e.message),
+        _ => ServerFailure(e.message),
+      };
+
+  static List<EpisodeEntity> _toEpisodeEntities(List<EpisodeModel> models) =>
+      models.map((m) => m.toEntity()).toList();
+
+  Future<List<EpisodeModel>> _safeGetCachedEpisodes(String query) async {
+    try {
+      return await local.getCachedEpisodesByQuery(query);
+    } on CacheException {
+      return [];
+    }
+  }
+
+  Future<void> _safeCacheEpisodes(List<EpisodeModel> models) async {
+    try {
+      await local.cacheEpisodes(models);
+    } on CacheException {
+      // Silently ignored: cache write failure must not break the main flow.
+    }
+  }
+
+  Future<List<CharacterModel>> _safeGetCachedCharacters(int episodeId) async {
+    try {
+      return await local.getCachedCharactersByEpisode(episodeId);
+    } on CacheException {
+      return [];
+    }
+  }
+
+  Future<void> _safeCacheCharacters(
+    int episodeId,
+    List<CharacterModel> models,
+  ) async {
+    try {
+      await local.cacheCharactersForEpisode(episodeId, models);
+    } on CacheException {
+      // Silently ignored: cache write failure must not break the main flow.
+    }
   }
 }

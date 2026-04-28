@@ -6,9 +6,6 @@ import 'package:rick_episodes/features/favorites/data/datasources/favorites_loca
 import 'package:rick_episodes/features/favorites/domain/entities/favorite.dart';
 import 'package:rick_episodes/features/favorites/domain/repositories/favorites_repository.dart';
 
-// NOTE: FavoritesRepository depende de EpisodeLocalDatasource para montar
-// a entidade Favorite completa. Aqui usamos um stub simples de Episode;
-// na implementação real, injete EpisodeLocalDatasource e busque pelo id.
 class FavoritesRepositoryImpl implements FavoritesRepository {
   final FavoritesLocalDatasource datasource;
   const FavoritesRepositoryImpl(this.datasource);
@@ -20,15 +17,14 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       final favorites = rows
           .map(
             (r) => Favorite(
-              episode: Episode(
-                id: r.episodeId,
+              episode: EpisodeEntity(
+                id: r.characterId,
                 name: '',
                 airDate: '',
-                episode: '',
-                characters: const [],
-                url: '',
+                episodeCode: '',
+                characterUrls: const [],
               ),
-              savedAt: r.savedAt,
+              savedAt: r.createdAt,
             ),
           )
           .toList();
@@ -39,9 +35,9 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addFavorite(int episodeId) async {
+  Future<Either<Failure, void>> addFavorite(int characterId) async {
     try {
-      await datasource.addFavorite(episodeId);
+      await datasource.addFavorite(characterId);
       return const Right(null);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
@@ -49,9 +45,9 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, void>> removeFavorite(int episodeId) async {
+  Future<Either<Failure, void>> removeFavorite(int characterId) async {
     try {
-      await datasource.removeFavorite(episodeId);
+      await datasource.removeFavorite(characterId);
       return const Right(null);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
@@ -59,9 +55,9 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> isFavorite(int episodeId) async {
+  Future<Either<Failure, bool>> isFavorite(int characterId) async {
     try {
-      final result = await datasource.isFavorite(episodeId);
+      final result = await datasource.isFavorite(characterId);
       return Right(result);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));

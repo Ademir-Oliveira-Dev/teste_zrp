@@ -1,0 +1,7 @@
+{
+  "elements": {},
+  "imports": [
+    "package:rick_episodes/core/database/app_database.dart",
+    "package:rick_episodes/features/recent_searches/domain/entities/recent_search.dart"
+  ]
+}

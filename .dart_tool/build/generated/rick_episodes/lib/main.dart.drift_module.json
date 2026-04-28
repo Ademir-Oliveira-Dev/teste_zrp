@@ -2,7 +2,13 @@
   "elements": {},
   "imports": [
     "package:flutter/material.dart",
-    "package:rick_episodes/core/di/injection_container.dart",
-    "package:rick_episodes/features/episodes/presentation/pages/episodes_page.dart"
+    "package:flutter_bloc/flutter_bloc.dart",
+    "package:rick_episodes/core/di/injection.dart",
+    "package:rick_episodes/features/episodes/presentation/cubit/episodes_cubit.dart",
+    "package:rick_episodes/features/episodes/presentation/pages/episodes_page.dart",
+    "package:rick_episodes/features/favorites/presentation/cubit/favorites_cubit.dart",
+    "package:rick_episodes/features/favorites/presentation/pages/favorites_page.dart",
+    "package:rick_episodes/features/recent_searches/presentation/cubit/recent_searches_cubit.dart",
+    "package:rick_episodes/features/recent_searches/presentation/pages/recent_searches_page.dart"
   ]
 }

@@ -14,10 +14,8 @@ class EpisodesTable extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
   TextColumn get airDate => text()();
-  TextColumn get episode => text()();
-  TextColumn get characterUrls => text()(); // JSON-encoded List<String>
-  TextColumn get url => text()();
-  DateTimeColumn get cachedAt => dateTime()();
+  TextColumn get episodeCode => text()();
+  TextColumn get characterUrls => text().withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -28,27 +26,34 @@ class CharactersTable extends Table {
   TextColumn get name => text()();
   TextColumn get status => text()();
   TextColumn get species => text()();
-  TextColumn get gender => text()();
   TextColumn get image => text()();
-  TextColumn get url => text()();
-  DateTimeColumn get cachedAt => dateTime()();
+  TextColumn get originName => text()();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
-class FavoritesTable extends Table {
+/// Tabela de junção N:N entre episódios e personagens.
+class EpisodeCharactersTable extends Table {
   IntColumn get episodeId => integer()();
-  DateTimeColumn get savedAt => dateTime()();
+  IntColumn get characterId => integer()();
 
   @override
-  Set<Column> get primaryKey => {episodeId};
+  Set<Column> get primaryKey => {episodeId, characterId};
+}
+
+class FavoritesTable extends Table {
+  IntColumn get characterId => integer()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {characterId};
 }
 
 class RecentSearchesTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get query => text()();
-  DateTimeColumn get searchedAt => dateTime()();
+  DateTimeColumn get createdAt => dateTime()();
 }
 
 // ---------------------------------------------------------------------------
@@ -59,6 +64,7 @@ class RecentSearchesTable extends Table {
   tables: [
     EpisodesTable,
     CharactersTable,
+    EpisodeCharactersTable,
     FavoritesTable,
     RecentSearchesTable,
   ],
@@ -69,7 +75,17 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 3) {
+            await m.addColumn(episodesTable, episodesTable.characterUrls);
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

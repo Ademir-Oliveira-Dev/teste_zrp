@@ -1,6 +1,7 @@
 {
   "elements": {},
   "imports": [
+    "package:drift/drift.dart",
     "package:rick_episodes/core/database/app_database.dart",
     "package:rick_episodes/features/episodes/domain/entities/character.dart"
   ]

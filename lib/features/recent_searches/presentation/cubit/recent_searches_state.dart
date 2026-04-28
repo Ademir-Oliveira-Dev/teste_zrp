@@ -12,7 +12,7 @@ final class RecentSearchesInitial extends RecentSearchesState {
 }
 
 final class RecentSearchesLoaded extends RecentSearchesState {
-  final List<RecentSearch> searches;
+  final List<RecentSearchEntity> searches;
   const RecentSearchesLoaded(this.searches);
 
   @override

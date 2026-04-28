@@ -25,32 +25,23 @@ class $EpisodesTableTable extends EpisodesTable
   late final GeneratedColumn<String> airDate = GeneratedColumn<String>(
       'air_date', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _episodeMeta =
-      const VerificationMeta('episode');
+  static const VerificationMeta _episodeCodeMeta =
+      const VerificationMeta('episodeCode');
   @override
-  late final GeneratedColumn<String> episode = GeneratedColumn<String>(
-      'episode', aliasedName, false,
+  late final GeneratedColumn<String> episodeCode = GeneratedColumn<String>(
+      'episode_code', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _characterUrlsMeta =
       const VerificationMeta('characterUrls');
   @override
   late final GeneratedColumn<String> characterUrls = GeneratedColumn<String>(
       'character_urls', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _urlMeta = const VerificationMeta('url');
-  @override
-  late final GeneratedColumn<String> url = GeneratedColumn<String>(
-      'url', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _cachedAtMeta =
-      const VerificationMeta('cachedAt');
-  @override
-  late final GeneratedColumn<DateTime> cachedAt = GeneratedColumn<DateTime>(
-      'cached_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('[]'));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, airDate, episode, characterUrls, url, cachedAt];
+      [id, name, airDate, episodeCode, characterUrls];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -76,31 +67,19 @@ class $EpisodesTableTable extends EpisodesTable
     } else if (isInserting) {
       context.missing(_airDateMeta);
     }
-    if (data.containsKey('episode')) {
-      context.handle(_episodeMeta,
-          episode.isAcceptableOrUnknown(data['episode']!, _episodeMeta));
+    if (data.containsKey('episode_code')) {
+      context.handle(
+          _episodeCodeMeta,
+          episodeCode.isAcceptableOrUnknown(
+              data['episode_code']!, _episodeCodeMeta));
     } else if (isInserting) {
-      context.missing(_episodeMeta);
+      context.missing(_episodeCodeMeta);
     }
     if (data.containsKey('character_urls')) {
       context.handle(
           _characterUrlsMeta,
           characterUrls.isAcceptableOrUnknown(
               data['character_urls']!, _characterUrlsMeta));
-    } else if (isInserting) {
-      context.missing(_characterUrlsMeta);
-    }
-    if (data.containsKey('url')) {
-      context.handle(
-          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
-    } else if (isInserting) {
-      context.missing(_urlMeta);
-    }
-    if (data.containsKey('cached_at')) {
-      context.handle(_cachedAtMeta,
-          cachedAt.isAcceptableOrUnknown(data['cached_at']!, _cachedAtMeta));
-    } else if (isInserting) {
-      context.missing(_cachedAtMeta);
     }
     return context;
   }
@@ -117,14 +96,10 @@ class $EpisodesTableTable extends EpisodesTable
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       airDate: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}air_date'])!,
-      episode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}episode'])!,
+      episodeCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}episode_code'])!,
       characterUrls: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}character_urls'])!,
-      url: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
-      cachedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}cached_at'])!,
     );
   }
 
@@ -139,28 +114,22 @@ class EpisodesTableData extends DataClass
   final int id;
   final String name;
   final String airDate;
-  final String episode;
+  final String episodeCode;
   final String characterUrls;
-  final String url;
-  final DateTime cachedAt;
   const EpisodesTableData(
       {required this.id,
       required this.name,
       required this.airDate,
-      required this.episode,
-      required this.characterUrls,
-      required this.url,
-      required this.cachedAt});
+      required this.episodeCode,
+      required this.characterUrls});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['air_date'] = Variable<String>(airDate);
-    map['episode'] = Variable<String>(episode);
+    map['episode_code'] = Variable<String>(episodeCode);
     map['character_urls'] = Variable<String>(characterUrls);
-    map['url'] = Variable<String>(url);
-    map['cached_at'] = Variable<DateTime>(cachedAt);
     return map;
   }
 
@@ -169,10 +138,8 @@ class EpisodesTableData extends DataClass
       id: Value(id),
       name: Value(name),
       airDate: Value(airDate),
-      episode: Value(episode),
+      episodeCode: Value(episodeCode),
       characterUrls: Value(characterUrls),
-      url: Value(url),
-      cachedAt: Value(cachedAt),
     );
   }
 
@@ -183,10 +150,8 @@ class EpisodesTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       airDate: serializer.fromJson<String>(json['airDate']),
-      episode: serializer.fromJson<String>(json['episode']),
+      episodeCode: serializer.fromJson<String>(json['episodeCode']),
       characterUrls: serializer.fromJson<String>(json['characterUrls']),
-      url: serializer.fromJson<String>(json['url']),
-      cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
     );
   }
   @override
@@ -196,10 +161,8 @@ class EpisodesTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'airDate': serializer.toJson<String>(airDate),
-      'episode': serializer.toJson<String>(episode),
+      'episodeCode': serializer.toJson<String>(episodeCode),
       'characterUrls': serializer.toJson<String>(characterUrls),
-      'url': serializer.toJson<String>(url),
-      'cachedAt': serializer.toJson<DateTime>(cachedAt),
     };
   }
 
@@ -207,30 +170,25 @@ class EpisodesTableData extends DataClass
           {int? id,
           String? name,
           String? airDate,
-          String? episode,
-          String? characterUrls,
-          String? url,
-          DateTime? cachedAt}) =>
+          String? episodeCode,
+          String? characterUrls}) =>
       EpisodesTableData(
         id: id ?? this.id,
         name: name ?? this.name,
         airDate: airDate ?? this.airDate,
-        episode: episode ?? this.episode,
+        episodeCode: episodeCode ?? this.episodeCode,
         characterUrls: characterUrls ?? this.characterUrls,
-        url: url ?? this.url,
-        cachedAt: cachedAt ?? this.cachedAt,
       );
   EpisodesTableData copyWithCompanion(EpisodesTableCompanion data) {
     return EpisodesTableData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       airDate: data.airDate.present ? data.airDate.value : this.airDate,
-      episode: data.episode.present ? data.episode.value : this.episode,
+      episodeCode:
+          data.episodeCode.present ? data.episodeCode.value : this.episodeCode,
       characterUrls: data.characterUrls.present
           ? data.characterUrls.value
           : this.characterUrls,
-      url: data.url.present ? data.url.value : this.url,
-      cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
     );
   }
 
@@ -240,17 +198,15 @@ class EpisodesTableData extends DataClass
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('airDate: $airDate, ')
-          ..write('episode: $episode, ')
-          ..write('characterUrls: $characterUrls, ')
-          ..write('url: $url, ')
-          ..write('cachedAt: $cachedAt')
+          ..write('episodeCode: $episodeCode, ')
+          ..write('characterUrls: $characterUrls')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, name, airDate, episode, characterUrls, url, cachedAt);
+      Object.hash(id, name, airDate, episodeCode, characterUrls);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -258,60 +214,45 @@ class EpisodesTableData extends DataClass
           other.id == this.id &&
           other.name == this.name &&
           other.airDate == this.airDate &&
-          other.episode == this.episode &&
-          other.characterUrls == this.characterUrls &&
-          other.url == this.url &&
-          other.cachedAt == this.cachedAt);
+          other.episodeCode == this.episodeCode &&
+          other.characterUrls == this.characterUrls);
 }
 
 class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> airDate;
-  final Value<String> episode;
+  final Value<String> episodeCode;
   final Value<String> characterUrls;
-  final Value<String> url;
-  final Value<DateTime> cachedAt;
   const EpisodesTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.airDate = const Value.absent(),
-    this.episode = const Value.absent(),
+    this.episodeCode = const Value.absent(),
     this.characterUrls = const Value.absent(),
-    this.url = const Value.absent(),
-    this.cachedAt = const Value.absent(),
   });
   EpisodesTableCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String airDate,
-    required String episode,
-    required String characterUrls,
-    required String url,
-    required DateTime cachedAt,
+    required String episodeCode,
+    this.characterUrls = const Value.absent(),
   })  : name = Value(name),
         airDate = Value(airDate),
-        episode = Value(episode),
-        characterUrls = Value(characterUrls),
-        url = Value(url),
-        cachedAt = Value(cachedAt);
+        episodeCode = Value(episodeCode);
   static Insertable<EpisodesTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? airDate,
-    Expression<String>? episode,
+    Expression<String>? episodeCode,
     Expression<String>? characterUrls,
-    Expression<String>? url,
-    Expression<DateTime>? cachedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (airDate != null) 'air_date': airDate,
-      if (episode != null) 'episode': episode,
+      if (episodeCode != null) 'episode_code': episodeCode,
       if (characterUrls != null) 'character_urls': characterUrls,
-      if (url != null) 'url': url,
-      if (cachedAt != null) 'cached_at': cachedAt,
     });
   }
 
@@ -319,18 +260,14 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
       {Value<int>? id,
       Value<String>? name,
       Value<String>? airDate,
-      Value<String>? episode,
-      Value<String>? characterUrls,
-      Value<String>? url,
-      Value<DateTime>? cachedAt}) {
+      Value<String>? episodeCode,
+      Value<String>? characterUrls}) {
     return EpisodesTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       airDate: airDate ?? this.airDate,
-      episode: episode ?? this.episode,
+      episodeCode: episodeCode ?? this.episodeCode,
       characterUrls: characterUrls ?? this.characterUrls,
-      url: url ?? this.url,
-      cachedAt: cachedAt ?? this.cachedAt,
     );
   }
 
@@ -346,17 +283,11 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
     if (airDate.present) {
       map['air_date'] = Variable<String>(airDate.value);
     }
-    if (episode.present) {
-      map['episode'] = Variable<String>(episode.value);
+    if (episodeCode.present) {
+      map['episode_code'] = Variable<String>(episodeCode.value);
     }
     if (characterUrls.present) {
       map['character_urls'] = Variable<String>(characterUrls.value);
-    }
-    if (url.present) {
-      map['url'] = Variable<String>(url.value);
-    }
-    if (cachedAt.present) {
-      map['cached_at'] = Variable<DateTime>(cachedAt.value);
     }
     return map;
   }
@@ -367,10 +298,8 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('airDate: $airDate, ')
-          ..write('episode: $episode, ')
-          ..write('characterUrls: $characterUrls, ')
-          ..write('url: $url, ')
-          ..write('cachedAt: $cachedAt')
+          ..write('episodeCode: $episodeCode, ')
+          ..write('characterUrls: $characterUrls')
           ..write(')'))
         .toString();
   }
@@ -403,30 +332,20 @@ class $CharactersTableTable extends CharactersTable
   late final GeneratedColumn<String> species = GeneratedColumn<String>(
       'species', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _genderMeta = const VerificationMeta('gender');
-  @override
-  late final GeneratedColumn<String> gender = GeneratedColumn<String>(
-      'gender', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _imageMeta = const VerificationMeta('image');
   @override
   late final GeneratedColumn<String> image = GeneratedColumn<String>(
       'image', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _urlMeta = const VerificationMeta('url');
+  static const VerificationMeta _originNameMeta =
+      const VerificationMeta('originName');
   @override
-  late final GeneratedColumn<String> url = GeneratedColumn<String>(
-      'url', aliasedName, false,
+  late final GeneratedColumn<String> originName = GeneratedColumn<String>(
+      'origin_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _cachedAtMeta =
-      const VerificationMeta('cachedAt');
-  @override
-  late final GeneratedColumn<DateTime> cachedAt = GeneratedColumn<DateTime>(
-      'cached_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, status, species, gender, image, url, cachedAt];
+      [id, name, status, species, image, originName];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -459,29 +378,19 @@ class $CharactersTableTable extends CharactersTable
     } else if (isInserting) {
       context.missing(_speciesMeta);
     }
-    if (data.containsKey('gender')) {
-      context.handle(_genderMeta,
-          gender.isAcceptableOrUnknown(data['gender']!, _genderMeta));
-    } else if (isInserting) {
-      context.missing(_genderMeta);
-    }
     if (data.containsKey('image')) {
       context.handle(
           _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
     } else if (isInserting) {
       context.missing(_imageMeta);
     }
-    if (data.containsKey('url')) {
+    if (data.containsKey('origin_name')) {
       context.handle(
-          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+          _originNameMeta,
+          originName.isAcceptableOrUnknown(
+              data['origin_name']!, _originNameMeta));
     } else if (isInserting) {
-      context.missing(_urlMeta);
-    }
-    if (data.containsKey('cached_at')) {
-      context.handle(_cachedAtMeta,
-          cachedAt.isAcceptableOrUnknown(data['cached_at']!, _cachedAtMeta));
-    } else if (isInserting) {
-      context.missing(_cachedAtMeta);
+      context.missing(_originNameMeta);
     }
     return context;
   }
@@ -500,14 +409,10 @@ class $CharactersTableTable extends CharactersTable
           .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
       species: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}species'])!,
-      gender: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}gender'])!,
       image: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}image'])!,
-      url: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
-      cachedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}cached_at'])!,
+      originName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}origin_name'])!,
     );
   }
 
@@ -523,19 +428,15 @@ class CharactersTableData extends DataClass
   final String name;
   final String status;
   final String species;
-  final String gender;
   final String image;
-  final String url;
-  final DateTime cachedAt;
+  final String originName;
   const CharactersTableData(
       {required this.id,
       required this.name,
       required this.status,
       required this.species,
-      required this.gender,
       required this.image,
-      required this.url,
-      required this.cachedAt});
+      required this.originName});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -543,10 +444,8 @@ class CharactersTableData extends DataClass
     map['name'] = Variable<String>(name);
     map['status'] = Variable<String>(status);
     map['species'] = Variable<String>(species);
-    map['gender'] = Variable<String>(gender);
     map['image'] = Variable<String>(image);
-    map['url'] = Variable<String>(url);
-    map['cached_at'] = Variable<DateTime>(cachedAt);
+    map['origin_name'] = Variable<String>(originName);
     return map;
   }
 
@@ -556,10 +455,8 @@ class CharactersTableData extends DataClass
       name: Value(name),
       status: Value(status),
       species: Value(species),
-      gender: Value(gender),
       image: Value(image),
-      url: Value(url),
-      cachedAt: Value(cachedAt),
+      originName: Value(originName),
     );
   }
 
@@ -571,10 +468,8 @@ class CharactersTableData extends DataClass
       name: serializer.fromJson<String>(json['name']),
       status: serializer.fromJson<String>(json['status']),
       species: serializer.fromJson<String>(json['species']),
-      gender: serializer.fromJson<String>(json['gender']),
       image: serializer.fromJson<String>(json['image']),
-      url: serializer.fromJson<String>(json['url']),
-      cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
+      originName: serializer.fromJson<String>(json['originName']),
     );
   }
   @override
@@ -585,10 +480,8 @@ class CharactersTableData extends DataClass
       'name': serializer.toJson<String>(name),
       'status': serializer.toJson<String>(status),
       'species': serializer.toJson<String>(species),
-      'gender': serializer.toJson<String>(gender),
       'image': serializer.toJson<String>(image),
-      'url': serializer.toJson<String>(url),
-      'cachedAt': serializer.toJson<DateTime>(cachedAt),
+      'originName': serializer.toJson<String>(originName),
     };
   }
 
@@ -597,19 +490,15 @@ class CharactersTableData extends DataClass
           String? name,
           String? status,
           String? species,
-          String? gender,
           String? image,
-          String? url,
-          DateTime? cachedAt}) =>
+          String? originName}) =>
       CharactersTableData(
         id: id ?? this.id,
         name: name ?? this.name,
         status: status ?? this.status,
         species: species ?? this.species,
-        gender: gender ?? this.gender,
         image: image ?? this.image,
-        url: url ?? this.url,
-        cachedAt: cachedAt ?? this.cachedAt,
+        originName: originName ?? this.originName,
       );
   CharactersTableData copyWithCompanion(CharactersTableCompanion data) {
     return CharactersTableData(
@@ -617,10 +506,9 @@ class CharactersTableData extends DataClass
       name: data.name.present ? data.name.value : this.name,
       status: data.status.present ? data.status.value : this.status,
       species: data.species.present ? data.species.value : this.species,
-      gender: data.gender.present ? data.gender.value : this.gender,
       image: data.image.present ? data.image.value : this.image,
-      url: data.url.present ? data.url.value : this.url,
-      cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
+      originName:
+          data.originName.present ? data.originName.value : this.originName,
     );
   }
 
@@ -631,17 +519,14 @@ class CharactersTableData extends DataClass
           ..write('name: $name, ')
           ..write('status: $status, ')
           ..write('species: $species, ')
-          ..write('gender: $gender, ')
           ..write('image: $image, ')
-          ..write('url: $url, ')
-          ..write('cachedAt: $cachedAt')
+          ..write('originName: $originName')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, status, species, gender, image, url, cachedAt);
+  int get hashCode => Object.hash(id, name, status, species, image, originName);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -650,10 +535,8 @@ class CharactersTableData extends DataClass
           other.name == this.name &&
           other.status == this.status &&
           other.species == this.species &&
-          other.gender == this.gender &&
           other.image == this.image &&
-          other.url == this.url &&
-          other.cachedAt == this.cachedAt);
+          other.originName == this.originName);
 }
 
 class CharactersTableCompanion extends UpdateCompanion<CharactersTableData> {
@@ -661,55 +544,43 @@ class CharactersTableCompanion extends UpdateCompanion<CharactersTableData> {
   final Value<String> name;
   final Value<String> status;
   final Value<String> species;
-  final Value<String> gender;
   final Value<String> image;
-  final Value<String> url;
-  final Value<DateTime> cachedAt;
+  final Value<String> originName;
   const CharactersTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.status = const Value.absent(),
     this.species = const Value.absent(),
-    this.gender = const Value.absent(),
     this.image = const Value.absent(),
-    this.url = const Value.absent(),
-    this.cachedAt = const Value.absent(),
+    this.originName = const Value.absent(),
   });
   CharactersTableCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String status,
     required String species,
-    required String gender,
     required String image,
-    required String url,
-    required DateTime cachedAt,
+    required String originName,
   })  : name = Value(name),
         status = Value(status),
         species = Value(species),
-        gender = Value(gender),
         image = Value(image),
-        url = Value(url),
-        cachedAt = Value(cachedAt);
+        originName = Value(originName);
   static Insertable<CharactersTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? status,
     Expression<String>? species,
-    Expression<String>? gender,
     Expression<String>? image,
-    Expression<String>? url,
-    Expression<DateTime>? cachedAt,
+    Expression<String>? originName,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (status != null) 'status': status,
       if (species != null) 'species': species,
-      if (gender != null) 'gender': gender,
       if (image != null) 'image': image,
-      if (url != null) 'url': url,
-      if (cachedAt != null) 'cached_at': cachedAt,
+      if (originName != null) 'origin_name': originName,
     });
   }
 
@@ -718,19 +589,15 @@ class CharactersTableCompanion extends UpdateCompanion<CharactersTableData> {
       Value<String>? name,
       Value<String>? status,
       Value<String>? species,
-      Value<String>? gender,
       Value<String>? image,
-      Value<String>? url,
-      Value<DateTime>? cachedAt}) {
+      Value<String>? originName}) {
     return CharactersTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       status: status ?? this.status,
       species: species ?? this.species,
-      gender: gender ?? this.gender,
       image: image ?? this.image,
-      url: url ?? this.url,
-      cachedAt: cachedAt ?? this.cachedAt,
+      originName: originName ?? this.originName,
     );
   }
 
@@ -749,17 +616,11 @@ class CharactersTableCompanion extends UpdateCompanion<CharactersTableData> {
     if (species.present) {
       map['species'] = Variable<String>(species.value);
     }
-    if (gender.present) {
-      map['gender'] = Variable<String>(gender.value);
-    }
     if (image.present) {
       map['image'] = Variable<String>(image.value);
     }
-    if (url.present) {
-      map['url'] = Variable<String>(url.value);
-    }
-    if (cachedAt.present) {
-      map['cached_at'] = Variable<DateTime>(cachedAt.value);
+    if (originName.present) {
+      map['origin_name'] = Variable<String>(originName.value);
     }
     return map;
   }
@@ -771,10 +632,210 @@ class CharactersTableCompanion extends UpdateCompanion<CharactersTableData> {
           ..write('name: $name, ')
           ..write('status: $status, ')
           ..write('species: $species, ')
-          ..write('gender: $gender, ')
           ..write('image: $image, ')
-          ..write('url: $url, ')
-          ..write('cachedAt: $cachedAt')
+          ..write('originName: $originName')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $EpisodeCharactersTableTable extends EpisodeCharactersTable
+    with TableInfo<$EpisodeCharactersTableTable, EpisodeCharactersTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EpisodeCharactersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _episodeIdMeta =
+      const VerificationMeta('episodeId');
+  @override
+  late final GeneratedColumn<int> episodeId = GeneratedColumn<int>(
+      'episode_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _characterIdMeta =
+      const VerificationMeta('characterId');
+  @override
+  late final GeneratedColumn<int> characterId = GeneratedColumn<int>(
+      'character_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [episodeId, characterId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'episode_characters_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<EpisodeCharactersTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('episode_id')) {
+      context.handle(_episodeIdMeta,
+          episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta));
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('character_id')) {
+      context.handle(
+          _characterIdMeta,
+          characterId.isAcceptableOrUnknown(
+              data['character_id']!, _characterIdMeta));
+    } else if (isInserting) {
+      context.missing(_characterIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {episodeId, characterId};
+  @override
+  EpisodeCharactersTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EpisodeCharactersTableData(
+      episodeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}episode_id'])!,
+      characterId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}character_id'])!,
+    );
+  }
+
+  @override
+  $EpisodeCharactersTableTable createAlias(String alias) {
+    return $EpisodeCharactersTableTable(attachedDatabase, alias);
+  }
+}
+
+class EpisodeCharactersTableData extends DataClass
+    implements Insertable<EpisodeCharactersTableData> {
+  final int episodeId;
+  final int characterId;
+  const EpisodeCharactersTableData(
+      {required this.episodeId, required this.characterId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['episode_id'] = Variable<int>(episodeId);
+    map['character_id'] = Variable<int>(characterId);
+    return map;
+  }
+
+  EpisodeCharactersTableCompanion toCompanion(bool nullToAbsent) {
+    return EpisodeCharactersTableCompanion(
+      episodeId: Value(episodeId),
+      characterId: Value(characterId),
+    );
+  }
+
+  factory EpisodeCharactersTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EpisodeCharactersTableData(
+      episodeId: serializer.fromJson<int>(json['episodeId']),
+      characterId: serializer.fromJson<int>(json['characterId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'episodeId': serializer.toJson<int>(episodeId),
+      'characterId': serializer.toJson<int>(characterId),
+    };
+  }
+
+  EpisodeCharactersTableData copyWith({int? episodeId, int? characterId}) =>
+      EpisodeCharactersTableData(
+        episodeId: episodeId ?? this.episodeId,
+        characterId: characterId ?? this.characterId,
+      );
+  EpisodeCharactersTableData copyWithCompanion(
+      EpisodeCharactersTableCompanion data) {
+    return EpisodeCharactersTableData(
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      characterId:
+          data.characterId.present ? data.characterId.value : this.characterId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EpisodeCharactersTableData(')
+          ..write('episodeId: $episodeId, ')
+          ..write('characterId: $characterId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(episodeId, characterId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EpisodeCharactersTableData &&
+          other.episodeId == this.episodeId &&
+          other.characterId == this.characterId);
+}
+
+class EpisodeCharactersTableCompanion
+    extends UpdateCompanion<EpisodeCharactersTableData> {
+  final Value<int> episodeId;
+  final Value<int> characterId;
+  final Value<int> rowid;
+  const EpisodeCharactersTableCompanion({
+    this.episodeId = const Value.absent(),
+    this.characterId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EpisodeCharactersTableCompanion.insert({
+    required int episodeId,
+    required int characterId,
+    this.rowid = const Value.absent(),
+  })  : episodeId = Value(episodeId),
+        characterId = Value(characterId);
+  static Insertable<EpisodeCharactersTableData> custom({
+    Expression<int>? episodeId,
+    Expression<int>? characterId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (episodeId != null) 'episode_id': episodeId,
+      if (characterId != null) 'character_id': characterId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EpisodeCharactersTableCompanion copyWith(
+      {Value<int>? episodeId, Value<int>? characterId, Value<int>? rowid}) {
+    return EpisodeCharactersTableCompanion(
+      episodeId: episodeId ?? this.episodeId,
+      characterId: characterId ?? this.characterId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (episodeId.present) {
+      map['episode_id'] = Variable<int>(episodeId.value);
+    }
+    if (characterId.present) {
+      map['character_id'] = Variable<int>(characterId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EpisodeCharactersTableCompanion(')
+          ..write('episodeId: $episodeId, ')
+          ..write('characterId: $characterId, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -786,20 +847,20 @@ class $FavoritesTableTable extends FavoritesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $FavoritesTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _episodeIdMeta =
-      const VerificationMeta('episodeId');
+  static const VerificationMeta _characterIdMeta =
+      const VerificationMeta('characterId');
   @override
-  late final GeneratedColumn<int> episodeId = GeneratedColumn<int>(
-      'episode_id', aliasedName, false,
+  late final GeneratedColumn<int> characterId = GeneratedColumn<int>(
+      'character_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _savedAtMeta =
-      const VerificationMeta('savedAt');
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> savedAt = GeneratedColumn<DateTime>(
-      'saved_at', aliasedName, false,
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [episodeId, savedAt];
+  List<GeneratedColumn> get $columns => [characterId, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -810,29 +871,31 @@ class $FavoritesTableTable extends FavoritesTable
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('episode_id')) {
-      context.handle(_episodeIdMeta,
-          episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta));
+    if (data.containsKey('character_id')) {
+      context.handle(
+          _characterIdMeta,
+          characterId.isAcceptableOrUnknown(
+              data['character_id']!, _characterIdMeta));
     }
-    if (data.containsKey('saved_at')) {
-      context.handle(_savedAtMeta,
-          savedAt.isAcceptableOrUnknown(data['saved_at']!, _savedAtMeta));
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
-      context.missing(_savedAtMeta);
+      context.missing(_createdAtMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {episodeId};
+  Set<GeneratedColumn> get $primaryKey => {characterId};
   @override
   FavoritesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FavoritesTableData(
-      episodeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}episode_id'])!,
-      savedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}saved_at'])!,
+      characterId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}character_id'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -844,21 +907,22 @@ class $FavoritesTableTable extends FavoritesTable
 
 class FavoritesTableData extends DataClass
     implements Insertable<FavoritesTableData> {
-  final int episodeId;
-  final DateTime savedAt;
-  const FavoritesTableData({required this.episodeId, required this.savedAt});
+  final int characterId;
+  final DateTime createdAt;
+  const FavoritesTableData(
+      {required this.characterId, required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['episode_id'] = Variable<int>(episodeId);
-    map['saved_at'] = Variable<DateTime>(savedAt);
+    map['character_id'] = Variable<int>(characterId);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
   FavoritesTableCompanion toCompanion(bool nullToAbsent) {
     return FavoritesTableCompanion(
-      episodeId: Value(episodeId),
-      savedAt: Value(savedAt),
+      characterId: Value(characterId),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -866,87 +930,88 @@ class FavoritesTableData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FavoritesTableData(
-      episodeId: serializer.fromJson<int>(json['episodeId']),
-      savedAt: serializer.fromJson<DateTime>(json['savedAt']),
+      characterId: serializer.fromJson<int>(json['characterId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'episodeId': serializer.toJson<int>(episodeId),
-      'savedAt': serializer.toJson<DateTime>(savedAt),
+      'characterId': serializer.toJson<int>(characterId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  FavoritesTableData copyWith({int? episodeId, DateTime? savedAt}) =>
+  FavoritesTableData copyWith({int? characterId, DateTime? createdAt}) =>
       FavoritesTableData(
-        episodeId: episodeId ?? this.episodeId,
-        savedAt: savedAt ?? this.savedAt,
+        characterId: characterId ?? this.characterId,
+        createdAt: createdAt ?? this.createdAt,
       );
   FavoritesTableData copyWithCompanion(FavoritesTableCompanion data) {
     return FavoritesTableData(
-      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
-      savedAt: data.savedAt.present ? data.savedAt.value : this.savedAt,
+      characterId:
+          data.characterId.present ? data.characterId.value : this.characterId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
   @override
   String toString() {
     return (StringBuffer('FavoritesTableData(')
-          ..write('episodeId: $episodeId, ')
-          ..write('savedAt: $savedAt')
+          ..write('characterId: $characterId, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(episodeId, savedAt);
+  int get hashCode => Object.hash(characterId, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FavoritesTableData &&
-          other.episodeId == this.episodeId &&
-          other.savedAt == this.savedAt);
+          other.characterId == this.characterId &&
+          other.createdAt == this.createdAt);
 }
 
 class FavoritesTableCompanion extends UpdateCompanion<FavoritesTableData> {
-  final Value<int> episodeId;
-  final Value<DateTime> savedAt;
+  final Value<int> characterId;
+  final Value<DateTime> createdAt;
   const FavoritesTableCompanion({
-    this.episodeId = const Value.absent(),
-    this.savedAt = const Value.absent(),
+    this.characterId = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   FavoritesTableCompanion.insert({
-    this.episodeId = const Value.absent(),
-    required DateTime savedAt,
-  }) : savedAt = Value(savedAt);
+    this.characterId = const Value.absent(),
+    required DateTime createdAt,
+  }) : createdAt = Value(createdAt);
   static Insertable<FavoritesTableData> custom({
-    Expression<int>? episodeId,
-    Expression<DateTime>? savedAt,
+    Expression<int>? characterId,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
-      if (episodeId != null) 'episode_id': episodeId,
-      if (savedAt != null) 'saved_at': savedAt,
+      if (characterId != null) 'character_id': characterId,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
   FavoritesTableCompanion copyWith(
-      {Value<int>? episodeId, Value<DateTime>? savedAt}) {
+      {Value<int>? characterId, Value<DateTime>? createdAt}) {
     return FavoritesTableCompanion(
-      episodeId: episodeId ?? this.episodeId,
-      savedAt: savedAt ?? this.savedAt,
+      characterId: characterId ?? this.characterId,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (episodeId.present) {
-      map['episode_id'] = Variable<int>(episodeId.value);
+    if (characterId.present) {
+      map['character_id'] = Variable<int>(characterId.value);
     }
-    if (savedAt.present) {
-      map['saved_at'] = Variable<DateTime>(savedAt.value);
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     return map;
   }
@@ -954,8 +1019,8 @@ class FavoritesTableCompanion extends UpdateCompanion<FavoritesTableData> {
   @override
   String toString() {
     return (StringBuffer('FavoritesTableCompanion(')
-          ..write('episodeId: $episodeId, ')
-          ..write('savedAt: $savedAt')
+          ..write('characterId: $characterId, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -981,14 +1046,14 @@ class $RecentSearchesTableTable extends RecentSearchesTable
   late final GeneratedColumn<String> query = GeneratedColumn<String>(
       'query', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _searchedAtMeta =
-      const VerificationMeta('searchedAt');
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> searchedAt = GeneratedColumn<DateTime>(
-      'searched_at', aliasedName, false,
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, query, searchedAt];
+  List<GeneratedColumn> get $columns => [id, query, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1009,13 +1074,11 @@ class $RecentSearchesTableTable extends RecentSearchesTable
     } else if (isInserting) {
       context.missing(_queryMeta);
     }
-    if (data.containsKey('searched_at')) {
-      context.handle(
-          _searchedAtMeta,
-          searchedAt.isAcceptableOrUnknown(
-              data['searched_at']!, _searchedAtMeta));
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
-      context.missing(_searchedAtMeta);
+      context.missing(_createdAtMeta);
     }
     return context;
   }
@@ -1031,8 +1094,8 @@ class $RecentSearchesTableTable extends RecentSearchesTable
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       query: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}query'])!,
-      searchedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}searched_at'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -1046,15 +1109,15 @@ class RecentSearchesTableData extends DataClass
     implements Insertable<RecentSearchesTableData> {
   final int id;
   final String query;
-  final DateTime searchedAt;
+  final DateTime createdAt;
   const RecentSearchesTableData(
-      {required this.id, required this.query, required this.searchedAt});
+      {required this.id, required this.query, required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['query'] = Variable<String>(query);
-    map['searched_at'] = Variable<DateTime>(searchedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -1062,7 +1125,7 @@ class RecentSearchesTableData extends DataClass
     return RecentSearchesTableCompanion(
       id: Value(id),
       query: Value(query),
-      searchedAt: Value(searchedAt),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -1072,7 +1135,7 @@ class RecentSearchesTableData extends DataClass
     return RecentSearchesTableData(
       id: serializer.fromJson<int>(json['id']),
       query: serializer.fromJson<String>(json['query']),
-      searchedAt: serializer.fromJson<DateTime>(json['searchedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -1081,23 +1144,22 @@ class RecentSearchesTableData extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'query': serializer.toJson<String>(query),
-      'searchedAt': serializer.toJson<DateTime>(searchedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
   RecentSearchesTableData copyWith(
-          {int? id, String? query, DateTime? searchedAt}) =>
+          {int? id, String? query, DateTime? createdAt}) =>
       RecentSearchesTableData(
         id: id ?? this.id,
         query: query ?? this.query,
-        searchedAt: searchedAt ?? this.searchedAt,
+        createdAt: createdAt ?? this.createdAt,
       );
   RecentSearchesTableData copyWithCompanion(RecentSearchesTableCompanion data) {
     return RecentSearchesTableData(
       id: data.id.present ? data.id.value : this.id,
       query: data.query.present ? data.query.value : this.query,
-      searchedAt:
-          data.searchedAt.present ? data.searchedAt.value : this.searchedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
@@ -1106,56 +1168,56 @@ class RecentSearchesTableData extends DataClass
     return (StringBuffer('RecentSearchesTableData(')
           ..write('id: $id, ')
           ..write('query: $query, ')
-          ..write('searchedAt: $searchedAt')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, query, searchedAt);
+  int get hashCode => Object.hash(id, query, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is RecentSearchesTableData &&
           other.id == this.id &&
           other.query == this.query &&
-          other.searchedAt == this.searchedAt);
+          other.createdAt == this.createdAt);
 }
 
 class RecentSearchesTableCompanion
     extends UpdateCompanion<RecentSearchesTableData> {
   final Value<int> id;
   final Value<String> query;
-  final Value<DateTime> searchedAt;
+  final Value<DateTime> createdAt;
   const RecentSearchesTableCompanion({
     this.id = const Value.absent(),
     this.query = const Value.absent(),
-    this.searchedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   RecentSearchesTableCompanion.insert({
     this.id = const Value.absent(),
     required String query,
-    required DateTime searchedAt,
+    required DateTime createdAt,
   })  : query = Value(query),
-        searchedAt = Value(searchedAt);
+        createdAt = Value(createdAt);
   static Insertable<RecentSearchesTableData> custom({
     Expression<int>? id,
     Expression<String>? query,
-    Expression<DateTime>? searchedAt,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (query != null) 'query': query,
-      if (searchedAt != null) 'searched_at': searchedAt,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
   RecentSearchesTableCompanion copyWith(
-      {Value<int>? id, Value<String>? query, Value<DateTime>? searchedAt}) {
+      {Value<int>? id, Value<String>? query, Value<DateTime>? createdAt}) {
     return RecentSearchesTableCompanion(
       id: id ?? this.id,
       query: query ?? this.query,
-      searchedAt: searchedAt ?? this.searchedAt,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -1168,8 +1230,8 @@ class RecentSearchesTableCompanion
     if (query.present) {
       map['query'] = Variable<String>(query.value);
     }
-    if (searchedAt.present) {
-      map['searched_at'] = Variable<DateTime>(searchedAt.value);
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     return map;
   }
@@ -1179,7 +1241,7 @@ class RecentSearchesTableCompanion
     return (StringBuffer('RecentSearchesTableCompanion(')
           ..write('id: $id, ')
           ..write('query: $query, ')
-          ..write('searchedAt: $searchedAt')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -1191,6 +1253,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $EpisodesTableTable episodesTable = $EpisodesTableTable(this);
   late final $CharactersTableTable charactersTable =
       $CharactersTableTable(this);
+  late final $EpisodeCharactersTableTable episodeCharactersTable =
+      $EpisodeCharactersTableTable(this);
   late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
   late final $RecentSearchesTableTable recentSearchesTable =
       $RecentSearchesTableTable(this);
@@ -1198,8 +1262,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [episodesTable, charactersTable, favoritesTable, recentSearchesTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        episodesTable,
+        charactersTable,
+        episodeCharactersTable,
+        favoritesTable,
+        recentSearchesTable
+      ];
 }
 
 typedef $$EpisodesTableTableCreateCompanionBuilder = EpisodesTableCompanion
@@ -1207,20 +1276,16 @@ typedef $$EpisodesTableTableCreateCompanionBuilder = EpisodesTableCompanion
   Value<int> id,
   required String name,
   required String airDate,
-  required String episode,
-  required String characterUrls,
-  required String url,
-  required DateTime cachedAt,
+  required String episodeCode,
+  Value<String> characterUrls,
 });
 typedef $$EpisodesTableTableUpdateCompanionBuilder = EpisodesTableCompanion
     Function({
   Value<int> id,
   Value<String> name,
   Value<String> airDate,
-  Value<String> episode,
+  Value<String> episodeCode,
   Value<String> characterUrls,
-  Value<String> url,
-  Value<DateTime> cachedAt,
 });
 
 class $$EpisodesTableTableFilterComposer
@@ -1241,17 +1306,11 @@ class $$EpisodesTableTableFilterComposer
   ColumnFilters<String> get airDate => $composableBuilder(
       column: $table.airDate, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get episode => $composableBuilder(
-      column: $table.episode, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get episodeCode => $composableBuilder(
+      column: $table.episodeCode, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get characterUrls => $composableBuilder(
       column: $table.characterUrls, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get url => $composableBuilder(
-      column: $table.url, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get cachedAt => $composableBuilder(
-      column: $table.cachedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$EpisodesTableTableOrderingComposer
@@ -1272,18 +1331,12 @@ class $$EpisodesTableTableOrderingComposer
   ColumnOrderings<String> get airDate => $composableBuilder(
       column: $table.airDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get episode => $composableBuilder(
-      column: $table.episode, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get episodeCode => $composableBuilder(
+      column: $table.episodeCode, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get characterUrls => $composableBuilder(
       column: $table.characterUrls,
       builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get url => $composableBuilder(
-      column: $table.url, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
-      column: $table.cachedAt, builder: (column) => ColumnOrderings(column));
 }
 
 class $$EpisodesTableTableAnnotationComposer
@@ -1304,17 +1357,11 @@ class $$EpisodesTableTableAnnotationComposer
   GeneratedColumn<String> get airDate =>
       $composableBuilder(column: $table.airDate, builder: (column) => column);
 
-  GeneratedColumn<String> get episode =>
-      $composableBuilder(column: $table.episode, builder: (column) => column);
+  GeneratedColumn<String> get episodeCode => $composableBuilder(
+      column: $table.episodeCode, builder: (column) => column);
 
   GeneratedColumn<String> get characterUrls => $composableBuilder(
       column: $table.characterUrls, builder: (column) => column);
-
-  GeneratedColumn<String> get url =>
-      $composableBuilder(column: $table.url, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get cachedAt =>
-      $composableBuilder(column: $table.cachedAt, builder: (column) => column);
 }
 
 class $$EpisodesTableTableTableManager extends RootTableManager<
@@ -1346,37 +1393,29 @@ class $$EpisodesTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> airDate = const Value.absent(),
-            Value<String> episode = const Value.absent(),
+            Value<String> episodeCode = const Value.absent(),
             Value<String> characterUrls = const Value.absent(),
-            Value<String> url = const Value.absent(),
-            Value<DateTime> cachedAt = const Value.absent(),
           }) =>
               EpisodesTableCompanion(
             id: id,
             name: name,
             airDate: airDate,
-            episode: episode,
+            episodeCode: episodeCode,
             characterUrls: characterUrls,
-            url: url,
-            cachedAt: cachedAt,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
             required String airDate,
-            required String episode,
-            required String characterUrls,
-            required String url,
-            required DateTime cachedAt,
+            required String episodeCode,
+            Value<String> characterUrls = const Value.absent(),
           }) =>
               EpisodesTableCompanion.insert(
             id: id,
             name: name,
             airDate: airDate,
-            episode: episode,
+            episodeCode: episodeCode,
             characterUrls: characterUrls,
-            url: url,
-            cachedAt: cachedAt,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1406,10 +1445,8 @@ typedef $$CharactersTableTableCreateCompanionBuilder = CharactersTableCompanion
   required String name,
   required String status,
   required String species,
-  required String gender,
   required String image,
-  required String url,
-  required DateTime cachedAt,
+  required String originName,
 });
 typedef $$CharactersTableTableUpdateCompanionBuilder = CharactersTableCompanion
     Function({
@@ -1417,10 +1454,8 @@ typedef $$CharactersTableTableUpdateCompanionBuilder = CharactersTableCompanion
   Value<String> name,
   Value<String> status,
   Value<String> species,
-  Value<String> gender,
   Value<String> image,
-  Value<String> url,
-  Value<DateTime> cachedAt,
+  Value<String> originName,
 });
 
 class $$CharactersTableTableFilterComposer
@@ -1444,17 +1479,11 @@ class $$CharactersTableTableFilterComposer
   ColumnFilters<String> get species => $composableBuilder(
       column: $table.species, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get gender => $composableBuilder(
-      column: $table.gender, builder: (column) => ColumnFilters(column));
-
   ColumnFilters<String> get image => $composableBuilder(
       column: $table.image, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get url => $composableBuilder(
-      column: $table.url, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get cachedAt => $composableBuilder(
-      column: $table.cachedAt, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get originName => $composableBuilder(
+      column: $table.originName, builder: (column) => ColumnFilters(column));
 }
 
 class $$CharactersTableTableOrderingComposer
@@ -1478,17 +1507,11 @@ class $$CharactersTableTableOrderingComposer
   ColumnOrderings<String> get species => $composableBuilder(
       column: $table.species, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get gender => $composableBuilder(
-      column: $table.gender, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<String> get image => $composableBuilder(
       column: $table.image, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get url => $composableBuilder(
-      column: $table.url, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
-      column: $table.cachedAt, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get originName => $composableBuilder(
+      column: $table.originName, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CharactersTableTableAnnotationComposer
@@ -1512,17 +1535,11 @@ class $$CharactersTableTableAnnotationComposer
   GeneratedColumn<String> get species =>
       $composableBuilder(column: $table.species, builder: (column) => column);
 
-  GeneratedColumn<String> get gender =>
-      $composableBuilder(column: $table.gender, builder: (column) => column);
-
   GeneratedColumn<String> get image =>
       $composableBuilder(column: $table.image, builder: (column) => column);
 
-  GeneratedColumn<String> get url =>
-      $composableBuilder(column: $table.url, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get cachedAt =>
-      $composableBuilder(column: $table.cachedAt, builder: (column) => column);
+  GeneratedColumn<String> get originName => $composableBuilder(
+      column: $table.originName, builder: (column) => column);
 }
 
 class $$CharactersTableTableTableManager extends RootTableManager<
@@ -1556,40 +1573,32 @@ class $$CharactersTableTableTableManager extends RootTableManager<
             Value<String> name = const Value.absent(),
             Value<String> status = const Value.absent(),
             Value<String> species = const Value.absent(),
-            Value<String> gender = const Value.absent(),
             Value<String> image = const Value.absent(),
-            Value<String> url = const Value.absent(),
-            Value<DateTime> cachedAt = const Value.absent(),
+            Value<String> originName = const Value.absent(),
           }) =>
               CharactersTableCompanion(
             id: id,
             name: name,
             status: status,
             species: species,
-            gender: gender,
             image: image,
-            url: url,
-            cachedAt: cachedAt,
+            originName: originName,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
             required String status,
             required String species,
-            required String gender,
             required String image,
-            required String url,
-            required DateTime cachedAt,
+            required String originName,
           }) =>
               CharactersTableCompanion.insert(
             id: id,
             name: name,
             status: status,
             species: species,
-            gender: gender,
             image: image,
-            url: url,
-            cachedAt: cachedAt,
+            originName: originName,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1613,15 +1622,150 @@ typedef $$CharactersTableTableProcessedTableManager = ProcessedTableManager<
     ),
     CharactersTableData,
     PrefetchHooks Function()>;
+typedef $$EpisodeCharactersTableTableCreateCompanionBuilder
+    = EpisodeCharactersTableCompanion Function({
+  required int episodeId,
+  required int characterId,
+  Value<int> rowid,
+});
+typedef $$EpisodeCharactersTableTableUpdateCompanionBuilder
+    = EpisodeCharactersTableCompanion Function({
+  Value<int> episodeId,
+  Value<int> characterId,
+  Value<int> rowid,
+});
+
+class $$EpisodeCharactersTableTableFilterComposer
+    extends Composer<_$AppDatabase, $EpisodeCharactersTableTable> {
+  $$EpisodeCharactersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get episodeId => $composableBuilder(
+      column: $table.episodeId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => ColumnFilters(column));
+}
+
+class $$EpisodeCharactersTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $EpisodeCharactersTableTable> {
+  $$EpisodeCharactersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get episodeId => $composableBuilder(
+      column: $table.episodeId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EpisodeCharactersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EpisodeCharactersTableTable> {
+  $$EpisodeCharactersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => column);
+}
+
+class $$EpisodeCharactersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $EpisodeCharactersTableTable,
+    EpisodeCharactersTableData,
+    $$EpisodeCharactersTableTableFilterComposer,
+    $$EpisodeCharactersTableTableOrderingComposer,
+    $$EpisodeCharactersTableTableAnnotationComposer,
+    $$EpisodeCharactersTableTableCreateCompanionBuilder,
+    $$EpisodeCharactersTableTableUpdateCompanionBuilder,
+    (
+      EpisodeCharactersTableData,
+      BaseReferences<_$AppDatabase, $EpisodeCharactersTableTable,
+          EpisodeCharactersTableData>
+    ),
+    EpisodeCharactersTableData,
+    PrefetchHooks Function()> {
+  $$EpisodeCharactersTableTableTableManager(
+      _$AppDatabase db, $EpisodeCharactersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EpisodeCharactersTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EpisodeCharactersTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EpisodeCharactersTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> episodeId = const Value.absent(),
+            Value<int> characterId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EpisodeCharactersTableCompanion(
+            episodeId: episodeId,
+            characterId: characterId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int episodeId,
+            required int characterId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EpisodeCharactersTableCompanion.insert(
+            episodeId: episodeId,
+            characterId: characterId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$EpisodeCharactersTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $EpisodeCharactersTableTable,
+        EpisodeCharactersTableData,
+        $$EpisodeCharactersTableTableFilterComposer,
+        $$EpisodeCharactersTableTableOrderingComposer,
+        $$EpisodeCharactersTableTableAnnotationComposer,
+        $$EpisodeCharactersTableTableCreateCompanionBuilder,
+        $$EpisodeCharactersTableTableUpdateCompanionBuilder,
+        (
+          EpisodeCharactersTableData,
+          BaseReferences<_$AppDatabase, $EpisodeCharactersTableTable,
+              EpisodeCharactersTableData>
+        ),
+        EpisodeCharactersTableData,
+        PrefetchHooks Function()>;
 typedef $$FavoritesTableTableCreateCompanionBuilder = FavoritesTableCompanion
     Function({
-  Value<int> episodeId,
-  required DateTime savedAt,
+  Value<int> characterId,
+  required DateTime createdAt,
 });
 typedef $$FavoritesTableTableUpdateCompanionBuilder = FavoritesTableCompanion
     Function({
-  Value<int> episodeId,
-  Value<DateTime> savedAt,
+  Value<int> characterId,
+  Value<DateTime> createdAt,
 });
 
 class $$FavoritesTableTableFilterComposer
@@ -1633,11 +1777,11 @@ class $$FavoritesTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get episodeId => $composableBuilder(
-      column: $table.episodeId, builder: (column) => ColumnFilters(column));
+  ColumnFilters<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get savedAt => $composableBuilder(
-      column: $table.savedAt, builder: (column) => ColumnFilters(column));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$FavoritesTableTableOrderingComposer
@@ -1649,11 +1793,11 @@ class $$FavoritesTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get episodeId => $composableBuilder(
-      column: $table.episodeId, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get savedAt => $composableBuilder(
-      column: $table.savedAt, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FavoritesTableTableAnnotationComposer
@@ -1665,11 +1809,11 @@ class $$FavoritesTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get episodeId =>
-      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+  GeneratedColumn<int> get characterId => $composableBuilder(
+      column: $table.characterId, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get savedAt =>
-      $composableBuilder(column: $table.savedAt, builder: (column) => column);
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
 
 class $$FavoritesTableTableTableManager extends RootTableManager<
@@ -1699,20 +1843,20 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$FavoritesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
-            Value<int> episodeId = const Value.absent(),
-            Value<DateTime> savedAt = const Value.absent(),
+            Value<int> characterId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
           }) =>
               FavoritesTableCompanion(
-            episodeId: episodeId,
-            savedAt: savedAt,
+            characterId: characterId,
+            createdAt: createdAt,
           ),
           createCompanionCallback: ({
-            Value<int> episodeId = const Value.absent(),
-            required DateTime savedAt,
+            Value<int> characterId = const Value.absent(),
+            required DateTime createdAt,
           }) =>
               FavoritesTableCompanion.insert(
-            episodeId: episodeId,
-            savedAt: savedAt,
+            characterId: characterId,
+            createdAt: createdAt,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1740,13 +1884,13 @@ typedef $$RecentSearchesTableTableCreateCompanionBuilder
     = RecentSearchesTableCompanion Function({
   Value<int> id,
   required String query,
-  required DateTime searchedAt,
+  required DateTime createdAt,
 });
 typedef $$RecentSearchesTableTableUpdateCompanionBuilder
     = RecentSearchesTableCompanion Function({
   Value<int> id,
   Value<String> query,
-  Value<DateTime> searchedAt,
+  Value<DateTime> createdAt,
 });
 
 class $$RecentSearchesTableTableFilterComposer
@@ -1764,8 +1908,8 @@ class $$RecentSearchesTableTableFilterComposer
   ColumnFilters<String> get query => $composableBuilder(
       column: $table.query, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get searchedAt => $composableBuilder(
-      column: $table.searchedAt, builder: (column) => ColumnFilters(column));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$RecentSearchesTableTableOrderingComposer
@@ -1783,8 +1927,8 @@ class $$RecentSearchesTableTableOrderingComposer
   ColumnOrderings<String> get query => $composableBuilder(
       column: $table.query, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get searchedAt => $composableBuilder(
-      column: $table.searchedAt, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
 
 class $$RecentSearchesTableTableAnnotationComposer
@@ -1802,8 +1946,8 @@ class $$RecentSearchesTableTableAnnotationComposer
   GeneratedColumn<String> get query =>
       $composableBuilder(column: $table.query, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get searchedAt => $composableBuilder(
-      column: $table.searchedAt, builder: (column) => column);
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
 
 class $$RecentSearchesTableTableTableManager extends RootTableManager<
@@ -1838,22 +1982,22 @@ class $$RecentSearchesTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> query = const Value.absent(),
-            Value<DateTime> searchedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
           }) =>
               RecentSearchesTableCompanion(
             id: id,
             query: query,
-            searchedAt: searchedAt,
+            createdAt: createdAt,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String query,
-            required DateTime searchedAt,
+            required DateTime createdAt,
           }) =>
               RecentSearchesTableCompanion.insert(
             id: id,
             query: query,
-            searchedAt: searchedAt,
+            createdAt: createdAt,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1886,6 +2030,9 @@ class $AppDatabaseManager {
       $$EpisodesTableTableTableManager(_db, _db.episodesTable);
   $$CharactersTableTableTableManager get charactersTable =>
       $$CharactersTableTableTableManager(_db, _db.charactersTable);
+  $$EpisodeCharactersTableTableTableManager get episodeCharactersTable =>
+      $$EpisodeCharactersTableTableTableManager(
+          _db, _db.episodeCharactersTable);
   $$FavoritesTableTableTableManager get favoritesTable =>
       $$FavoritesTableTableTableManager(_db, _db.favoritesTable);
   $$RecentSearchesTableTableTableManager get recentSearchesTable =>

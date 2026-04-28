@@ -1,26 +1,71 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 import 'package:rick_episodes/features/episodes/domain/usecases/search_episodes.dart';
+import 'package:rick_episodes/features/recent_searches/domain/entities/recent_search.dart';
+import 'package:rick_episodes/features/recent_searches/domain/usecases/get_recent_searches.dart';
+import 'package:rick_episodes/features/recent_searches/domain/usecases/save_search.dart';
 
 part 'episodes_state.dart';
 
-class EpisodesCubit extends Cubit<EpisodesState> {
+class EpisodeSearchCubit extends Cubit<EpisodeSearchState> {
   final SearchEpisodes searchEpisodes;
+  final GetRecentSearches getRecentSearches;
+  final SaveSearch saveSearch;
+  final Duration debounceDuration;
 
-  EpisodesCubit({required this.searchEpisodes}) : super(const EpisodesInitial());
+  Timer? _debounce;
 
-  Future<void> search(String query) async {
-    if (query.trim().isEmpty) return;
-    emit(const EpisodesLoading());
+  EpisodeSearchCubit({
+    required this.searchEpisodes,
+    required this.getRecentSearches,
+    required this.saveSearch,
+    this.debounceDuration = const Duration(milliseconds: 500),
+  }) : super(const EpisodeSearchInitial());
 
+  void search(String query) {
+    _debounce?.cancel();
+    if (query.trim().isEmpty) {
+      clearSearch();
+      return;
+    }
+    _debounce = Timer(debounceDuration, () {
+      emit(const EpisodeSearchLoading());
+      _performSearch(query.trim());
+    });
+  }
+
+  Future<void> _performSearch(String query) async {
     final result = await searchEpisodes(SearchEpisodesParams(query: query));
-
     result.fold(
-      (failure) => emit(EpisodesError(failure.message)),
-      (episodes) => emit(EpisodesLoaded(episodes)),
+      (failure) => emit(EpisodeSearchError(failure.message)),
+      (episodes) {
+        if (episodes.isEmpty) {
+          emit(const EpisodeSearchEmpty());
+        } else {
+          emit(EpisodeSearchLoaded(episodes));
+          saveSearch(SaveSearchParams(query: query));
+        }
+      },
     );
   }
 
-  void reset() => emit(const EpisodesInitial());
+  Future<void> loadRecentSearches() async {
+    final result = await getRecentSearches();
+    final searches = result.fold((_) => <RecentSearchEntity>[], (s) => s);
+    emit(EpisodeSearchInitial(recentSearches: searches));
+  }
+
+  Future<void> clearSearch() async {
+    _debounce?.cancel();
+    await loadRecentSearches();
+  }
+
+  @override
+  Future<void> close() {
+    _debounce?.cancel();
+    return super.close();
+  }
 }

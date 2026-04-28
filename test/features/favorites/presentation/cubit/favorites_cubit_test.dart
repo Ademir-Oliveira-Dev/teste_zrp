@@ -3,68 +3,82 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:rick_episodes/core/error/failures.dart';
-import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
-import 'package:rick_episodes/features/favorites/domain/entities/favorite.dart';
-import 'package:rick_episodes/features/favorites/domain/usecases/get_favorites.dart';
+import 'package:rick_episodes/features/episodes/domain/entities/character.dart';
+import 'package:rick_episodes/features/episodes/domain/usecases/get_favorite_characters.dart';
 import 'package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart';
 import 'package:rick_episodes/features/favorites/presentation/cubit/favorites_cubit.dart';
 
-class MockGetFavorites extends Mock implements GetFavorites {}
+class MockGetFavoriteCharacters extends Mock implements GetFavoriteCharacters {}
 class MockToggleFavorite extends Mock implements ToggleFavorite {}
 
 void main() {
   late FavoritesCubit cubit;
-  late MockGetFavorites mockGet;
+  late MockGetFavoriteCharacters mockGet;
   late MockToggleFavorite mockToggle;
 
   setUpAll(() {
     registerFallbackValue(
-      const ToggleFavoriteParams(episodeId: 1, isFavorite: false),
+      const ToggleFavoriteParams(episodeId: 1, isFavorite: true),
     );
   });
 
   setUp(() {
-    mockGet = MockGetFavorites();
+    mockGet = MockGetFavoriteCharacters();
     mockToggle = MockToggleFavorite();
-    cubit = FavoritesCubit(getFavorites: mockGet, toggleFavorite: mockToggle);
+    cubit = FavoritesCubit(
+      getFavoriteCharacters: mockGet,
+      toggleFavorite: mockToggle,
+    );
   });
 
   tearDown(() => cubit.close());
 
-  final tFavorite = Favorite(
-    episode: const Episode(
-      id: 1,
-      name: 'Pilot',
-      airDate: '',
-      episode: 'S01E01',
-      characters: [],
-      url: '',
-    ),
-    savedAt: DateTime(2024),
+  const tCharacter = CharacterEntity(
+    id: 1,
+    name: 'Rick Sanchez',
+    status: 'Alive',
+    species: 'Human',
+    image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+    originName: 'Earth (C-137)',
+    isFavorite: true,
   );
 
   group('load', () {
     blocTest<FavoritesCubit, FavoritesState>(
-      'emite [Loading, Loaded] com lista de favoritos',
+      'emite [Loading, Loaded] com lista de personagens favoritos',
       build: () {
-        when(() => mockGet()).thenAnswer((_) async => Right([tFavorite]));
+        when(() => mockGet())
+            .thenAnswer((_) async => const Right([tCharacter]));
         return cubit;
       },
-      act: (cubit) => cubit.load(),
+      act: (c) => c.load(),
       expect: () => [
         const FavoritesLoading(),
-        FavoritesLoaded([tFavorite]),
+        const FavoritesLoaded([tCharacter]),
       ],
     );
 
     blocTest<FavoritesCubit, FavoritesState>(
-      'emite [Loading, Error] quando getFavorites falha',
+      'emite [Loading, Loaded vazio] quando não há favoritos',
+      build: () {
+        when(() => mockGet()).thenAnswer((_) async => const Right([]));
+        return cubit;
+      },
+      act: (c) => c.load(),
+      expect: () => [
+        const FavoritesLoading(),
+        const FavoritesLoaded([]),
+      ],
+    );
+
+    blocTest<FavoritesCubit, FavoritesState>(
+      'emite [Loading, Error] quando getFavoriteCharacters falha',
       build: () {
         when(() => mockGet())
             .thenAnswer((_) async => const Left(CacheFailure()));
         return cubit;
       },
-      act: (cubit) => cubit.load(),
+      act: (c) => c.load(),
       expect: () => [
         const FavoritesLoading(),
         const FavoritesError('Erro ao acessar cache local.'),
@@ -72,20 +86,36 @@ void main() {
     );
   });
 
-  group('toggle', () {
+  group('remove', () {
     blocTest<FavoritesCubit, FavoritesState>(
-      'chama toggleFavorite e recarrega lista',
+      'remove favorito e recarrega lista',
       build: () {
         when(() => mockToggle(any()))
             .thenAnswer((_) async => const Right(null));
-        when(() => mockGet()).thenAnswer((_) async => Right([tFavorite]));
+        when(() => mockGet()).thenAnswer((_) async => const Right([]));
         return cubit;
       },
-      act: (cubit) => cubit.toggle(1, isFavorite: false),
+      act: (c) => c.remove(tCharacter),
       expect: () => [
         const FavoritesLoading(),
-        FavoritesLoaded([tFavorite]),
+        const FavoritesLoaded([]),
       ],
+      verify: (_) => verify(
+        () => mockToggle(
+          const ToggleFavoriteParams(episodeId: 1, isFavorite: true),
+        ),
+      ).called(1),
+    );
+
+    blocTest<FavoritesCubit, FavoritesState>(
+      'emite Error quando remoção falha',
+      build: () {
+        when(() => mockToggle(any()))
+            .thenAnswer((_) async => const Left(CacheFailure()));
+        return cubit;
+      },
+      act: (c) => c.remove(tCharacter),
+      expect: () => [const FavoritesError('Erro ao acessar cache local.')],
     );
   });
 }
