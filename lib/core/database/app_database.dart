@@ -81,10 +81,8 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // Dev-only: recria todas as tabelas ao atualizar o schema.
-          for (final table in allTables) {
-            await m.drop(table);
-            await m.create(table);
+          if (from < 3) {
+            await m.addColumn(episodesTable, episodesTable.characterUrls);
           }
         },
       );

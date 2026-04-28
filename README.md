@@ -1,17 +1,39 @@
 # rick_episodes
 
-A new Flutter project.
+Aplicativo Flutter para buscar episódios de Rick and Morty, visualizar personagens, favoritar personagens e consultar o histórico de buscas.
 
-## Getting Started
+<p align="center">
+  <img src="docs/assets/rick_episodes.gif" alt="Demonstração do app Rick Episodes" width="320">
+</p>
 
-This project is a starting point for a Flutter application.
+## Índice
 
-A few resources to get you started if this is your first Flutter project:
+- [Visão Geral](./docs/visao-geral.md)
+- [Arquitetura](./docs/arquitetura.md)
+- [Core](./docs/core.md)
+- [Banco de Dados](./docs/banco-de-dados.md)
+- [Feature: Episódios](./docs/feature-episodios.md)
+- [Feature: Favoritos](./docs/feature-favoritos.md)
+- [Feature: Buscas Recentes](./docs/feature-buscas-recentes.md)
+- [Testes](./docs/testes.md)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Stack
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter e Material 3.
+- Bloc/Cubit para gerenciamento de estado.
+- GetIt para injeção de dependências.
+- Dio para chamadas HTTP.
+- Drift + SQLite para persistência local.
+- Dartz para retorno funcional com `Either<Failure, T>`.
+- Equatable para comparação por valor.
+- bloc_test e mocktail para testes.
+
+## Estado Atual
+
+O projeto está estruturado em Clean Architecture por feature, com camadas de `data`, `domain` e `presentation`. A aplicação final usa uma navegação principal por abas:
+
+- Episódios.
+- Favoritos.
+- Histórico.
+
+O fluxo principal busca episódios na Rick and Morty API, salva dados relevantes no cache local, carrega personagens por episódio, permite favoritar personagens e mantém histórico de buscas recentes.
