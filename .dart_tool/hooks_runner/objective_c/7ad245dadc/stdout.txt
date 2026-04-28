@@ -1,58 +1,57 @@
-Running `(cd /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/; TMPDIR=/var/folders/_b/tgkwm2jn7b39ym4c_k62l_pc0000gn/T/ PATH=/Users/ademiroliveira/Documents/develop/flutter/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin HOME=/Users/ademiroliveira /Users/ademiroliveira/Documents/develop/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/package_config.json /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/objective_c/7ad245dadc/hook.dill --config=/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/objective_c/7ad245dadc/input.json )`.
-INFO: 2026-04-28 16:50:43.587123: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+Running `(cd /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/; TMPDIR=/var/folders/_b/tgkwm2jn7b39ym4c_k62l_pc0000gn/T/ PATH=/Users/ademiroliveira/.codex/tmp/arg0/codex-arg04C6S4F:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Users/ademiroliveira/.vscode/extensions/openai.chatgpt-26.422.62136-darwin-arm64/bin/macos-aarch64 HOME=/Users/ademiroliveira /Users/ademiroliveira/Documents/develop/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/package_config.json /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/objective_c/7ad245dadc/hook.dill --config=/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/objective_c/7ad245dadc/input.json )`.
+INFO: 2026-04-28 19:19:44.954344: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
 
-INFO: 2026-04-28 16:50:43.711207: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+INFO: 2026-04-28 19:19:45.084213: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
 
-INFO: 2026-04-28 16:50:43.724047: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/include/dart_api_dl.c -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+INFO: 2026-04-28 19:19:45.098026: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/include/dart_api_dl.c -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
 
-INFO: 2026-04-28 16:50:43.724417: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.c -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
+INFO: 2026-04-28 19:19:45.098442: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.c -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
 
-INFO: 2026-04-28 16:50:43.724563: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/test/util.c -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o
+INFO: 2026-04-28 19:19:45.098717: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/input_stream_adapter.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
 
-INFO: 2026-04-28 16:50:43.724675: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/input_stream_adapter.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
+INFO: 2026-04-28 19:19:45.098883: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
 
-INFO: 2026-04-28 16:50:43.724784: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+INFO: 2026-04-28 19:19:45.099137: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/ns_number.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
 
-INFO: 2026-04-28 16:50:43.724993: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/ns_number.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+INFO: 2026-04-28 19:19:45.099243: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/protocol.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
 
-INFO: 2026-04-28 16:50:43.725297: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c_bindings_generated.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
+INFO: 2026-04-28 19:19:45.099350: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/ademiroliveira/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c_bindings_generated.m -fpic -I src -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
 
-INFO: 2026-04-28 16:50:43.861909: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
+INFO: 2026-04-28 19:19:45.258001: 
+INFO: 2026-04-28 19:19:45.258037: 
+INFO: 2026-04-28 19:19:45.258068: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
 
-INFO: 2026-04-28 16:50:43.862255: 
-INFO: 2026-04-28 16:50:43.862330: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+INFO: 2026-04-28 19:19:45.258954: 
+INFO: 2026-04-28 19:19:45.258984: 
+INFO: 2026-04-28 19:19:45.258995: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o
 
-INFO: 2026-04-28 16:50:43.862650: 
-INFO: 2026-04-28 16:50:43.862699: 
-INFO: 2026-04-28 16:50:43.862726: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o
+INFO: 2026-04-28 19:19:45.264247: 
+INFO: 2026-04-28 19:19:45.264292: 
+INFO: 2026-04-28 19:19:45.264303: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
 
-INFO: 2026-04-28 16:50:43.864591: 
-INFO: 2026-04-28 16:50:43.864631: 
-INFO: 2026-04-28 16:50:43.864644: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
+INFO: 2026-04-28 19:19:45.268674: 
+INFO: 2026-04-28 19:19:45.268712: 
+INFO: 2026-04-28 19:19:45.268723: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
 
-INFO: 2026-04-28 16:50:43.868878: 
-INFO: 2026-04-28 16:50:43.868912: 
-INFO: 2026-04-28 16:50:43.868923: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
+INFO: 2026-04-28 19:19:45.533315: 
+INFO: 2026-04-28 19:19:45.533359: 
+INFO: 2026-04-28 19:19:45.533370: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
 
-INFO: 2026-04-28 16:50:44.111392: 
-INFO: 2026-04-28 16:50:44.111440: 
-INFO: 2026-04-28 16:50:44.111451: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+INFO: 2026-04-28 19:19:45.539571: 
+INFO: 2026-04-28 19:19:45.539624: 
+INFO: 2026-04-28 19:19:45.539634: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
 
-INFO: 2026-04-28 16:50:44.120572: 
-INFO: 2026-04-28 16:50:44.120611: 
-INFO: 2026-04-28 16:50:44.120622: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+INFO: 2026-04-28 19:19:45.541461: 
+INFO: 2026-04-28 19:19:45.541483: 
+INFO: 2026-04-28 19:19:45.541493: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
 
-INFO: 2026-04-28 16:50:44.123176: 
-INFO: 2026-04-28 16:50:44.123209: 
-INFO: 2026-04-28 16:50:44.123220: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
+INFO: 2026-04-28 19:19:45.556834: 
+INFO: 2026-04-28 19:19:45.556870: 
+INFO: 2026-04-28 19:19:45.556880: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
 
-INFO: 2026-04-28 16:50:44.138563: 
-INFO: 2026-04-28 16:50:44.138601: 
-INFO: 2026-04-28 16:50:44.138611: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
+INFO: 2026-04-28 19:19:45.557192: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
 
-INFO: 2026-04-28 16:50:44.138916: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o -o /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
-
-INFO: 2026-04-28 16:50:44.258286: 
-INFO: 2026-04-28 16:50:44.258357: 
-INFO: 2026-04-28 16:50:44.258369: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
+INFO: 2026-04-28 19:19:45.684173: 
+INFO: 2026-04-28 19:19:45.684251: 
+INFO: 2026-04-28 19:19:45.684263: Generated /Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
 

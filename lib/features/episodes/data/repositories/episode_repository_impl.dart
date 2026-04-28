@@ -25,28 +25,25 @@ class EpisodeRepositoryImpl implements EpisodeRepository {
   Future<Either<Failure, List<EpisodeEntity>>> searchEpisodes(
     String query,
   ) async {
-    // 1. Lê o cache.
-    final cached = await _safeGetCachedEpisodes(query);
-
-    // 2. Cache hit → retorna imediatamente.
-    if (cached.isNotEmpty) {
-      return Right(_toEpisodeEntities(cached));
-    }
-
-    // 3. Cache vazio → tenta a API.
     try {
       final models = await remote.searchEpisodes(query);
 
-      // 4. API OK → atualiza cache.
       if (models.isNotEmpty) {
         await _safeCacheEpisodes(models);
       }
 
       return Right(_toEpisodeEntities(models));
     } on AppException catch (e) {
-      // 5. API falha, sem cache → retorna Failure.
+      final cached = await _safeGetCachedEpisodes(query);
+      if (cached.isNotEmpty) {
+        return Right(_toEpisodeEntities(cached));
+      }
       return Left(_toFailure(e));
     } catch (e) {
+      final cached = await _safeGetCachedEpisodes(query);
+      if (cached.isNotEmpty) {
+        return Right(_toEpisodeEntities(cached));
+      }
       return Left(ServerFailure('Erro inesperado: $e'));
     }
   }
