@@ -6,9 +6,8 @@
     "package:flutter_test/flutter_test.dart",
     "package:mocktail/mocktail.dart",
     "package:rick_episodes/core/error/failures.dart",
-    "package:rick_episodes/features/episodes/domain/entities/episode.dart",
-    "package:rick_episodes/features/favorites/domain/entities/favorite.dart",
-    "package:rick_episodes/features/favorites/domain/usecases/get_favorites.dart",
+    "package:rick_episodes/features/episodes/domain/entities/character.dart",
+    "package:rick_episodes/features/episodes/domain/usecases/get_favorite_characters.dart",
     "package:rick_episodes/features/favorites/domain/usecases/toggle_favorite.dart",
     "package:rick_episodes/features/favorites/presentation/cubit/favorites_cubit.dart"
   ]

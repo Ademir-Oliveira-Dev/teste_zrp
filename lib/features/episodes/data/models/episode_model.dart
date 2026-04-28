@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import 'package:rick_episodes/core/database/app_database.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
@@ -41,8 +43,7 @@ class EpisodeModel {
       name: data.name,
       airDate: data.airDate,
       episodeCode: data.episodeCode,
-      // characterUrls não é persistido; vem apenas da API.
-      characterUrls: const [],
+      characterUrls: List<String>.from(jsonDecode(data.characterUrls) as List),
     );
   }
 
@@ -52,6 +53,7 @@ class EpisodeModel {
       name: name,
       airDate: airDate,
       episodeCode: episodeCode,
+      characterUrls: Value(jsonEncode(characterUrls)),
     );
   }
 

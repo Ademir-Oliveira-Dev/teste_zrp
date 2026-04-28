@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:rick_episodes/core/database/app_database.dart",
-        "offset": 1889,
+        "offset": 1967,
         "name": "AppDatabase"
       },
       "references": [
@@ -58,7 +58,7 @@
       "views": [],
       "includes": [],
       "queries": [],
-      "schema_version": 2,
+      "schema_version": 3,
       "daos": [],
       "has_constructor_arg": false
     },
@@ -158,6 +158,36 @@
           "documentationComment": null,
           "constraints": [],
           "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": false,
+          "nameInSql": "character_urls",
+          "nameInDart": "characterUrls",
+          "declaration": {
+            "source_uri": "package:rick_episodes/core/database/app_database.dart",
+            "offset": 580,
+            "name": "characterUrls"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": {
+            "elements": [
+              "const ",
+              {
+                "lexeme": "Constant",
+                "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+              },
+              "('[]')"
+            ]
+          },
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
         }
       ],
       "existing_data_class": null,
@@ -188,7 +218,7 @@
       },
       "declaration": {
         "source_uri": "package:rick_episodes/core/database/app_database.dart",
-        "offset": 623,
+        "offset": 701,
         "name": "CharactersTable"
       },
       "references": [],
@@ -203,7 +233,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 671,
+            "offset": 749,
             "name": "id"
           },
           "typeConverter": null,
@@ -224,7 +254,7 @@
           "nameInDart": "name",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 707,
+            "offset": 785,
             "name": "name"
           },
           "typeConverter": null,
@@ -245,7 +275,7 @@
           "nameInDart": "status",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 742,
+            "offset": 820,
             "name": "status"
           },
           "typeConverter": null,
@@ -266,7 +296,7 @@
           "nameInDart": "species",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 779,
+            "offset": 857,
             "name": "species"
           },
           "typeConverter": null,
@@ -287,7 +317,7 @@
           "nameInDart": "image",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 817,
+            "offset": 895,
             "name": "image"
           },
           "typeConverter": null,
@@ -308,7 +338,7 @@
           "nameInDart": "originName",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 853,
+            "offset": 931,
             "name": "originName"
           },
           "typeConverter": null,
@@ -349,7 +379,7 @@
       },
       "declaration": {
         "source_uri": "package:rick_episodes/core/database/app_database.dart",
-        "offset": 993,
+        "offset": 1071,
         "name": "EpisodeCharactersTable"
       },
       "references": [],
@@ -364,7 +394,7 @@
           "nameInDart": "episodeId",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1048,
+            "offset": 1126,
             "name": "episodeId"
           },
           "typeConverter": null,
@@ -385,7 +415,7 @@
           "nameInDart": "characterId",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1090,
+            "offset": 1168,
             "name": "characterId"
           },
           "typeConverter": null,
@@ -427,7 +457,7 @@
       },
       "declaration": {
         "source_uri": "package:rick_episodes/core/database/app_database.dart",
-        "offset": 1198,
+        "offset": 1276,
         "name": "FavoritesTable"
       },
       "references": [],
@@ -442,7 +472,7 @@
           "nameInDart": "characterId",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1245,
+            "offset": 1323,
             "name": "characterId"
           },
           "typeConverter": null,
@@ -463,7 +493,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1294,
+            "offset": 1372,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -504,7 +534,7 @@
       },
       "declaration": {
         "source_uri": "package:rick_episodes/core/database/app_database.dart",
-        "offset": 1390,
+        "offset": 1468,
         "name": "RecentSearchesTable"
       },
       "references": [],
@@ -519,7 +549,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1442,
+            "offset": 1520,
             "name": "id"
           },
           "typeConverter": null,
@@ -545,7 +575,7 @@
           "nameInDart": "query",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1494,
+            "offset": 1572,
             "name": "query"
           },
           "typeConverter": null,
@@ -566,7 +596,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:rick_episodes/core/database/app_database.dart",
-            "offset": 1534,
+            "offset": 1612,
             "name": "createdAt"
           },
           "typeConverter": null,

@@ -3,7 +3,10 @@
   "imports": [
     "package:flutter/material.dart",
     "package:flutter_bloc/flutter_bloc.dart",
-    "package:rick_episodes/core/di/injection_container.dart",
+    "package:rick_episodes/core/widgets/empty_state.dart",
+    "package:rick_episodes/core/widgets/error_state.dart",
+    "package:rick_episodes/core/widgets/loading_state.dart",
+    "package:rick_episodes/features/episodes/presentation/widgets/character_card.dart",
     "package:rick_episodes/features/favorites/presentation/cubit/favorites_cubit.dart"
   ]
 }

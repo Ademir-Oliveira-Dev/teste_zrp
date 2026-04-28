@@ -15,6 +15,7 @@ class EpisodesTable extends Table {
   TextColumn get name => text()();
   TextColumn get airDate => text()();
   TextColumn get episodeCode => text()();
+  TextColumn get characterUrls => text().withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -74,7 +75,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

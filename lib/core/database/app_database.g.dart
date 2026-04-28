@@ -31,8 +31,17 @@ class $EpisodesTableTable extends EpisodesTable
   late final GeneratedColumn<String> episodeCode = GeneratedColumn<String>(
       'episode_code', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _characterUrlsMeta =
+      const VerificationMeta('characterUrls');
   @override
-  List<GeneratedColumn> get $columns => [id, name, airDate, episodeCode];
+  late final GeneratedColumn<String> characterUrls = GeneratedColumn<String>(
+      'character_urls', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('[]'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, airDate, episodeCode, characterUrls];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -66,6 +75,12 @@ class $EpisodesTableTable extends EpisodesTable
     } else if (isInserting) {
       context.missing(_episodeCodeMeta);
     }
+    if (data.containsKey('character_urls')) {
+      context.handle(
+          _characterUrlsMeta,
+          characterUrls.isAcceptableOrUnknown(
+              data['character_urls']!, _characterUrlsMeta));
+    }
     return context;
   }
 
@@ -83,6 +98,8 @@ class $EpisodesTableTable extends EpisodesTable
           .read(DriftSqlType.string, data['${effectivePrefix}air_date'])!,
       episodeCode: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}episode_code'])!,
+      characterUrls: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}character_urls'])!,
     );
   }
 
@@ -98,11 +115,13 @@ class EpisodesTableData extends DataClass
   final String name;
   final String airDate;
   final String episodeCode;
+  final String characterUrls;
   const EpisodesTableData(
       {required this.id,
       required this.name,
       required this.airDate,
-      required this.episodeCode});
+      required this.episodeCode,
+      required this.characterUrls});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -110,6 +129,7 @@ class EpisodesTableData extends DataClass
     map['name'] = Variable<String>(name);
     map['air_date'] = Variable<String>(airDate);
     map['episode_code'] = Variable<String>(episodeCode);
+    map['character_urls'] = Variable<String>(characterUrls);
     return map;
   }
 
@@ -119,6 +139,7 @@ class EpisodesTableData extends DataClass
       name: Value(name),
       airDate: Value(airDate),
       episodeCode: Value(episodeCode),
+      characterUrls: Value(characterUrls),
     );
   }
 
@@ -130,6 +151,7 @@ class EpisodesTableData extends DataClass
       name: serializer.fromJson<String>(json['name']),
       airDate: serializer.fromJson<String>(json['airDate']),
       episodeCode: serializer.fromJson<String>(json['episodeCode']),
+      characterUrls: serializer.fromJson<String>(json['characterUrls']),
     );
   }
   @override
@@ -140,16 +162,22 @@ class EpisodesTableData extends DataClass
       'name': serializer.toJson<String>(name),
       'airDate': serializer.toJson<String>(airDate),
       'episodeCode': serializer.toJson<String>(episodeCode),
+      'characterUrls': serializer.toJson<String>(characterUrls),
     };
   }
 
   EpisodesTableData copyWith(
-          {int? id, String? name, String? airDate, String? episodeCode}) =>
+          {int? id,
+          String? name,
+          String? airDate,
+          String? episodeCode,
+          String? characterUrls}) =>
       EpisodesTableData(
         id: id ?? this.id,
         name: name ?? this.name,
         airDate: airDate ?? this.airDate,
         episodeCode: episodeCode ?? this.episodeCode,
+        characterUrls: characterUrls ?? this.characterUrls,
       );
   EpisodesTableData copyWithCompanion(EpisodesTableCompanion data) {
     return EpisodesTableData(
@@ -158,6 +186,9 @@ class EpisodesTableData extends DataClass
       airDate: data.airDate.present ? data.airDate.value : this.airDate,
       episodeCode:
           data.episodeCode.present ? data.episodeCode.value : this.episodeCode,
+      characterUrls: data.characterUrls.present
+          ? data.characterUrls.value
+          : this.characterUrls,
     );
   }
 
@@ -167,13 +198,15 @@ class EpisodesTableData extends DataClass
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('airDate: $airDate, ')
-          ..write('episodeCode: $episodeCode')
+          ..write('episodeCode: $episodeCode, ')
+          ..write('characterUrls: $characterUrls')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, airDate, episodeCode);
+  int get hashCode =>
+      Object.hash(id, name, airDate, episodeCode, characterUrls);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -181,7 +214,8 @@ class EpisodesTableData extends DataClass
           other.id == this.id &&
           other.name == this.name &&
           other.airDate == this.airDate &&
-          other.episodeCode == this.episodeCode);
+          other.episodeCode == this.episodeCode &&
+          other.characterUrls == this.characterUrls);
 }
 
 class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
@@ -189,17 +223,20 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
   final Value<String> name;
   final Value<String> airDate;
   final Value<String> episodeCode;
+  final Value<String> characterUrls;
   const EpisodesTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.airDate = const Value.absent(),
     this.episodeCode = const Value.absent(),
+    this.characterUrls = const Value.absent(),
   });
   EpisodesTableCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String airDate,
     required String episodeCode,
+    this.characterUrls = const Value.absent(),
   })  : name = Value(name),
         airDate = Value(airDate),
         episodeCode = Value(episodeCode);
@@ -208,12 +245,14 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
     Expression<String>? name,
     Expression<String>? airDate,
     Expression<String>? episodeCode,
+    Expression<String>? characterUrls,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (airDate != null) 'air_date': airDate,
       if (episodeCode != null) 'episode_code': episodeCode,
+      if (characterUrls != null) 'character_urls': characterUrls,
     });
   }
 
@@ -221,12 +260,14 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
       {Value<int>? id,
       Value<String>? name,
       Value<String>? airDate,
-      Value<String>? episodeCode}) {
+      Value<String>? episodeCode,
+      Value<String>? characterUrls}) {
     return EpisodesTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       airDate: airDate ?? this.airDate,
       episodeCode: episodeCode ?? this.episodeCode,
+      characterUrls: characterUrls ?? this.characterUrls,
     );
   }
 
@@ -245,6 +286,9 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
     if (episodeCode.present) {
       map['episode_code'] = Variable<String>(episodeCode.value);
     }
+    if (characterUrls.present) {
+      map['character_urls'] = Variable<String>(characterUrls.value);
+    }
     return map;
   }
 
@@ -254,7 +298,8 @@ class EpisodesTableCompanion extends UpdateCompanion<EpisodesTableData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('airDate: $airDate, ')
-          ..write('episodeCode: $episodeCode')
+          ..write('episodeCode: $episodeCode, ')
+          ..write('characterUrls: $characterUrls')
           ..write(')'))
         .toString();
   }
@@ -1232,6 +1277,7 @@ typedef $$EpisodesTableTableCreateCompanionBuilder = EpisodesTableCompanion
   required String name,
   required String airDate,
   required String episodeCode,
+  Value<String> characterUrls,
 });
 typedef $$EpisodesTableTableUpdateCompanionBuilder = EpisodesTableCompanion
     Function({
@@ -1239,6 +1285,7 @@ typedef $$EpisodesTableTableUpdateCompanionBuilder = EpisodesTableCompanion
   Value<String> name,
   Value<String> airDate,
   Value<String> episodeCode,
+  Value<String> characterUrls,
 });
 
 class $$EpisodesTableTableFilterComposer
@@ -1261,6 +1308,9 @@ class $$EpisodesTableTableFilterComposer
 
   ColumnFilters<String> get episodeCode => $composableBuilder(
       column: $table.episodeCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get characterUrls => $composableBuilder(
+      column: $table.characterUrls, builder: (column) => ColumnFilters(column));
 }
 
 class $$EpisodesTableTableOrderingComposer
@@ -1283,6 +1333,10 @@ class $$EpisodesTableTableOrderingComposer
 
   ColumnOrderings<String> get episodeCode => $composableBuilder(
       column: $table.episodeCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get characterUrls => $composableBuilder(
+      column: $table.characterUrls,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$EpisodesTableTableAnnotationComposer
@@ -1305,6 +1359,9 @@ class $$EpisodesTableTableAnnotationComposer
 
   GeneratedColumn<String> get episodeCode => $composableBuilder(
       column: $table.episodeCode, builder: (column) => column);
+
+  GeneratedColumn<String> get characterUrls => $composableBuilder(
+      column: $table.characterUrls, builder: (column) => column);
 }
 
 class $$EpisodesTableTableTableManager extends RootTableManager<
@@ -1337,24 +1394,28 @@ class $$EpisodesTableTableTableManager extends RootTableManager<
             Value<String> name = const Value.absent(),
             Value<String> airDate = const Value.absent(),
             Value<String> episodeCode = const Value.absent(),
+            Value<String> characterUrls = const Value.absent(),
           }) =>
               EpisodesTableCompanion(
             id: id,
             name: name,
             airDate: airDate,
             episodeCode: episodeCode,
+            characterUrls: characterUrls,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
             required String airDate,
             required String episodeCode,
+            Value<String> characterUrls = const Value.absent(),
           }) =>
               EpisodesTableCompanion.insert(
             id: id,
             name: name,
             airDate: airDate,
             episodeCode: episodeCode,
+            characterUrls: characterUrls,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

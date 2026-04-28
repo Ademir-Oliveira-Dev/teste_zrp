@@ -2,7 +2,7 @@
   "assets": [
     {
       "encoding": {
-        "file": "/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/sqlite3/build/download-1705e20e/libsqlite3.dylib",
+        "file": "/Users/ademiroliveira/Documents/teste_zrp/.dart_tool/hooks_runner/shared/sqlite3/build/download-db85ee4/libsqlite3.dylib",
         "id": "package:sqlite3/src/ffi/libsqlite3.g.dart",
         "link_mode": {
           "type": "dynamic_loading_bundle"
@@ -13,5 +13,5 @@
   ],
   "assets_for_linking": {},
   "status": "success",
-  "timestamp": "2026-04-28 19:26:48.000"
+  "timestamp": "2026-04-28 19:30:17.000"
 }

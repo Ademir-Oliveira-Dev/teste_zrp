@@ -109,7 +109,7 @@ class _StatusDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = switch (status.toLowerCase()) {
-      'alive' => Colors.green,
+      'alive' => Colors.blueGrey,
       'dead' => Colors.red,
       _ => Colors.grey,
     };
