@@ -1,14 +1,16 @@
-class ServerException implements Exception {
+abstract class AppException implements Exception {
   final String message;
-  const ServerException([this.message = 'Erro no servidor.']);
+  const AppException(this.message);
 }
 
-class CacheException implements Exception {
-  final String message;
-  const CacheException([this.message = 'Erro ao acessar cache local.']);
+class ServerException extends AppException {
+  const ServerException([super.message = 'Erro no servidor.']);
 }
 
-class NetworkException implements Exception {
-  final String message;
-  const NetworkException([this.message = 'Sem conexão com a internet.']);
+class CacheException extends AppException {
+  const CacheException([super.message = 'Erro ao acessar cache local.']);
+}
+
+class NetworkException extends AppException {
+  const NetworkException([super.message = 'Sem conexão com a internet.']);
 }

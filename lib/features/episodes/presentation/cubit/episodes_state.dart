@@ -16,7 +16,7 @@ final class EpisodesLoading extends EpisodesState {
 }
 
 final class EpisodesLoaded extends EpisodesState {
-  final List<Episode> episodes;
+  final List<EpisodeEntity> episodes;
   const EpisodesLoaded(this.episodes);
 
   @override

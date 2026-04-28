@@ -6,7 +6,7 @@ import 'package:rick_episodes/features/episodes/presentation/cubit/episode_detai
 import 'package:rick_episodes/features/episodes/presentation/widgets/character_tile.dart';
 
 class EpisodeDetailPage extends StatelessWidget {
-  final Episode episode;
+  final EpisodeEntity episode;
   const EpisodeDetailPage({super.key, required this.episode});
 
   @override
@@ -27,7 +27,7 @@ class EpisodeDetailPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(episode.episode,
+                        Text(episode.episodeCode,
                             style: Theme.of(context).textTheme.labelLarge),
                         Text(episode.airDate,
                             style: Theme.of(context).textTheme.bodySmall),

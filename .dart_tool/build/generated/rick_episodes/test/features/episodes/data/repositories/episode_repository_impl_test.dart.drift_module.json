@@ -10,6 +10,7 @@
     "package:rick_episodes/features/episodes/data/datasources/episode_local_datasource.dart",
     "package:rick_episodes/features/episodes/data/datasources/episode_remote_datasource.dart",
     "package:rick_episodes/features/episodes/data/models/episode_model.dart",
-    "package:rick_episodes/features/episodes/data/repositories/episode_repository_impl.dart"
+    "package:rick_episodes/features/episodes/data/repositories/episode_repository_impl.dart",
+    "package:rick_episodes/features/episodes/domain/entities/episode.dart"
   ]
 }

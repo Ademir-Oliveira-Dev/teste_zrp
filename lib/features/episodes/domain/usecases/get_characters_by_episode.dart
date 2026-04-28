@@ -8,7 +8,7 @@ class GetCharactersByEpisode {
   final EpisodeRepository repository;
   const GetCharactersByEpisode(this.repository);
 
-  Future<Either<Failure, List<Character>>> call(GetCharactersParams params) {
+  Future<Either<Failure, List<CharacterEntity>>> call(GetCharactersParams params) {
     return repository.getCharactersByEpisode(params.episodeId);
   }
 }

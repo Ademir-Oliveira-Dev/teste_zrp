@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:rick_episodes/core/database/app_database.dart';
-import 'package:rick_episodes/core/network/dio_client.dart';
+import 'package:rick_episodes/core/network/api_client.dart';
 import 'package:rick_episodes/core/network/network_info.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_local_datasource.dart';
 import 'package:rick_episodes/features/episodes/data/datasources/episode_remote_datasource.dart';
@@ -34,7 +34,7 @@ Future<void> init() async {
 
 void _registerCore() {
   sl.registerLazySingleton<AppDatabase>(() => AppDatabase());
-  sl.registerLazySingleton<DioClient>(() => DioClient());
+  sl.registerLazySingleton<ApiClient>(() => ApiClient());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 }
 

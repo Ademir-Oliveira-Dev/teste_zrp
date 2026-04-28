@@ -32,13 +32,19 @@ void main() {
   });
 
   const tQuery = 'Pilot';
-  const tEpisode = EpisodeModel(
+  const tModel = EpisodeModel(
     id: 1,
     name: 'Pilot',
     airDate: 'December 2, 2013',
-    episode: 'S01E01',
-    characters: ['https://rickandmortyapi.com/api/character/1'],
-    url: 'https://rickandmortyapi.com/api/episode/1',
+    episodeCode: 'S01E01',
+    characterUrls: ['https://rickandmortyapi.com/api/character/1'],
+  );
+  const tEntity = EpisodeEntity(
+    id: 1,
+    name: 'Pilot',
+    airDate: 'December 2, 2013',
+    episodeCode: 'S01E01',
+    characterUrls: ['https://rickandmortyapi.com/api/character/1'],
   );
 
   group('searchEpisodes — online', () {
@@ -46,16 +52,16 @@ void main() {
       when(() => mockNetwork.isConnected).thenAnswer((_) async => true);
     });
 
-    test('retorna lista do remote e salva no cache', () async {
+    test('retorna lista de entidades do remote e salva no cache', () async {
       when(() => mockRemote.searchEpisodes(tQuery))
-          .thenAnswer((_) async => [tEpisode]);
+          .thenAnswer((_) async => [tModel]);
       when(() => mockLocal.cacheEpisodes(any())).thenAnswer((_) async {});
 
       final result = await repository.searchEpisodes(tQuery);
 
-      expect(result, isA<Right<Failure, List<Episode>>>());
-      expect(result.getOrElse(() => <Episode>[]), [tEpisode]);
-      verify(() => mockLocal.cacheEpisodes([tEpisode])).called(1);
+      expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
+      expect(result.getOrElse(() => <EpisodeEntity>[]), [tEntity]);
+      verify(() => mockLocal.cacheEpisodes([tModel])).called(1);
     });
 
     test('retorna ServerFailure quando remote lança ServerException', () async {
@@ -74,14 +80,14 @@ void main() {
       when(() => mockNetwork.isConnected).thenAnswer((_) async => false);
     });
 
-    test('retorna cache quando offline', () async {
+    test('retorna entidades do cache quando offline', () async {
       when(() => mockLocal.getCachedEpisodes(tQuery))
-          .thenAnswer((_) async => [tEpisode]);
+          .thenAnswer((_) async => [tModel]);
 
       final result = await repository.searchEpisodes(tQuery);
 
-      expect(result, isA<Right<Failure, List<Episode>>>());
-      expect(result.getOrElse(() => <Episode>[]), [tEpisode]);
+      expect(result, isA<Right<Failure, List<EpisodeEntity>>>());
+      expect(result.getOrElse(() => <EpisodeEntity>[]), [tEntity]);
       verifyNever(() => mockRemote.searchEpisodes(any()));
     });
 

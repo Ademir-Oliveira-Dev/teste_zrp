@@ -16,7 +16,7 @@ class RecentSearchesLocalDatasourceImpl implements RecentSearchesLocalDatasource
   Future<List<RecentSearchesTableData>> getRecentSearches({int limit = 10}) async {
     try {
       return (db.select(db.recentSearchesTable)
-            ..orderBy([(t) => OrderingTerm.desc(t.searchedAt)])
+            ..orderBy([(t) => OrderingTerm.desc(t.createdAt)])
             ..limit(limit))
           .get();
     } catch (e) {
@@ -34,7 +34,7 @@ class RecentSearchesLocalDatasourceImpl implements RecentSearchesLocalDatasource
       await db.into(db.recentSearchesTable).insert(
             RecentSearchesTableCompanion.insert(
               query: query,
-              searchedAt: DateTime.now(),
+              createdAt: DateTime.now(),
             ),
           );
     } catch (e) {

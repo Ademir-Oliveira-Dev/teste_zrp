@@ -13,6 +13,10 @@ void main() {
   late EpisodesCubit cubit;
   late MockSearchEpisodes mockSearchEpisodes;
 
+  setUpAll(() {
+    registerFallbackValue(const SearchEpisodesParams(query: ''));
+  });
+
   setUp(() {
     mockSearchEpisodes = MockSearchEpisodes();
     cubit = EpisodesCubit(searchEpisodes: mockSearchEpisodes);
@@ -20,18 +24,13 @@ void main() {
 
   tearDown(() => cubit.close());
 
-  setUpAll(() {
-    registerFallbackValue(const SearchEpisodesParams(query: ''));
-  });
-
   const tEpisodes = [
-    Episode(
+    EpisodeEntity(
       id: 1,
       name: 'Pilot',
       airDate: 'December 2, 2013',
-      episode: 'S01E01',
-      characters: ['https://rickandmortyapi.com/api/character/1'],
-      url: 'https://rickandmortyapi.com/api/episode/1',
+      episodeCode: 'S01E01',
+      characterUrls: ['https://rickandmortyapi.com/api/character/1'],
     ),
   ];
 
@@ -51,7 +50,7 @@ void main() {
     );
 
     blocTest<EpisodesCubit, EpisodesState>(
-      'emite [Loading, Error] quando busca falha',
+      'emite [Loading, Error] quando busca falha no servidor',
       build: () {
         when(() => mockSearchEpisodes(any()))
             .thenAnswer((_) async => const Left(ServerFailure()));

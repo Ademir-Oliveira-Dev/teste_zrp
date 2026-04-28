@@ -12,7 +12,7 @@ class EpisodeDetailCubit extends Cubit<EpisodeDetailState> {
   EpisodeDetailCubit({required this.getCharacters})
       : super(const EpisodeDetailInitial());
 
-  Future<void> loadDetail(Episode episode) async {
+  Future<void> loadDetail(EpisodeEntity episode) async {
     emit(const EpisodeDetailLoading());
 
     final result = await getCharacters(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 
 class EpisodeCard extends StatelessWidget {
-  final Episode episode;
+  final EpisodeEntity episode;
   final VoidCallback onTap;
 
   const EpisodeCard({super.key, required this.episode, required this.onTap});
@@ -14,9 +14,9 @@ class EpisodeCard extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         title: Text(episode.name),
-        subtitle: Text('${episode.episode} • ${episode.airDate}'),
+        subtitle: Text('${episode.episodeCode} • ${episode.airDate}'),
         trailing: Text(
-          '${episode.characters.length} chars',
+          '${episode.characterUrls.length} chars',
           style: Theme.of(context).textTheme.labelSmall,
         ),
       ),

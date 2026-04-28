@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-class RecentSearch extends Equatable {
+class RecentSearchEntity extends Equatable {
   final int id;
   final String query;
-  final DateTime searchedAt;
+  final DateTime createdAt;
 
-  const RecentSearch({
+  const RecentSearchEntity({
     required this.id,
     required this.query,
-    required this.searchedAt,
+    required this.createdAt,
   });
 
   @override

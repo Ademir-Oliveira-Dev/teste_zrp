@@ -3,14 +3,19 @@ import 'package:drift/drift.dart';
 import 'package:rick_episodes/core/database/app_database.dart';
 import 'package:rick_episodes/features/episodes/domain/entities/episode.dart';
 
-class EpisodeModel extends Episode {
+class EpisodeModel {
+  final int id;
+  final String name;
+  final String airDate;
+  final String episodeCode;
+  final List<String> characterUrls;
+
   const EpisodeModel({
-    required super.id,
-    required super.name,
-    required super.airDate,
-    required super.episode,
-    required super.characters,
-    required super.url,
+    required this.id,
+    required this.name,
+    required this.airDate,
+    required this.episodeCode,
+    required this.characterUrls,
   });
 
   factory EpisodeModel.fromJson(Map<String, dynamic> json) {
@@ -18,9 +23,8 @@ class EpisodeModel extends Episode {
       id: json['id'] as int,
       name: json['name'] as String,
       airDate: json['air_date'] as String,
-      episode: json['episode'] as String,
-      characters: List<String>.from(json['characters'] as List),
-      url: json['url'] as String,
+      episodeCode: json['episode'] as String,
+      characterUrls: List<String>.from(json['characters'] as List),
     );
   }
 
@@ -28,9 +32,8 @@ class EpisodeModel extends Episode {
         'id': id,
         'name': name,
         'air_date': airDate,
-        'episode': episode,
-        'characters': characters,
-        'url': url,
+        'episode': episodeCode,
+        'characters': characterUrls,
       };
 
   factory EpisodeModel.fromTableData(EpisodesTableData data) {
@@ -38,9 +41,8 @@ class EpisodeModel extends Episode {
       id: data.id,
       name: data.name,
       airDate: data.airDate,
-      episode: data.episode,
-      characters: List<String>.from(jsonDecode(data.characterUrls) as List),
-      url: data.url,
+      episodeCode: data.episodeCode,
+      characterUrls: List<String>.from(jsonDecode(data.characterUrls) as List),
     );
   }
 
@@ -49,10 +51,19 @@ class EpisodeModel extends Episode {
       id: Value(id),
       name: name,
       airDate: airDate,
-      episode: episode,
-      characterUrls: jsonEncode(characters),
-      url: url,
+      episodeCode: episodeCode,
+      characterUrls: jsonEncode(characterUrls),
       cachedAt: DateTime.now(),
+    );
+  }
+
+  EpisodeEntity toEntity() {
+    return EpisodeEntity(
+      id: id,
+      name: name,
+      airDate: airDate,
+      episodeCode: episodeCode,
+      characterUrls: characterUrls,
     );
   }
 }

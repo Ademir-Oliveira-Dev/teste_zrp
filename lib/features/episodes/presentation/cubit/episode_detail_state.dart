@@ -16,8 +16,8 @@ final class EpisodeDetailLoading extends EpisodeDetailState {
 }
 
 final class EpisodeDetailLoaded extends EpisodeDetailState {
-  final Episode episode;
-  final List<Character> characters;
+  final EpisodeEntity episode;
+  final List<CharacterEntity> characters;
   const EpisodeDetailLoaded({required this.episode, required this.characters});
 
   @override

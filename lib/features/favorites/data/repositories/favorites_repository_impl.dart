@@ -6,9 +6,6 @@ import 'package:rick_episodes/features/favorites/data/datasources/favorites_loca
 import 'package:rick_episodes/features/favorites/domain/entities/favorite.dart';
 import 'package:rick_episodes/features/favorites/domain/repositories/favorites_repository.dart';
 
-// NOTE: FavoritesRepository depende de EpisodeLocalDatasource para montar
-// a entidade Favorite completa. Aqui usamos um stub simples de Episode;
-// na implementação real, injete EpisodeLocalDatasource e busque pelo id.
 class FavoritesRepositoryImpl implements FavoritesRepository {
   final FavoritesLocalDatasource datasource;
   const FavoritesRepositoryImpl(this.datasource);
@@ -20,13 +17,12 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       final favorites = rows
           .map(
             (r) => Favorite(
-              episode: Episode(
+              episode: EpisodeEntity(
                 id: r.episodeId,
                 name: '',
                 airDate: '',
-                episode: '',
-                characters: const [],
-                url: '',
+                episodeCode: '',
+                characterUrls: const [],
               ),
               savedAt: r.savedAt,
             ),

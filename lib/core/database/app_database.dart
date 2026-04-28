@@ -14,9 +14,8 @@ class EpisodesTable extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
   TextColumn get airDate => text()();
-  TextColumn get episode => text()();
+  TextColumn get episodeCode => text()();
   TextColumn get characterUrls => text()(); // JSON-encoded List<String>
-  TextColumn get url => text()();
   DateTimeColumn get cachedAt => dateTime()();
 
   @override
@@ -30,6 +29,7 @@ class CharactersTable extends Table {
   TextColumn get species => text()();
   TextColumn get gender => text()();
   TextColumn get image => text()();
+  TextColumn get originName => text()();
   TextColumn get url => text()();
   DateTimeColumn get cachedAt => dateTime()();
 
@@ -48,7 +48,7 @@ class FavoritesTable extends Table {
 class RecentSearchesTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get query => text()();
-  DateTimeColumn get searchedAt => dateTime()();
+  DateTimeColumn get createdAt => dateTime()();
 }
 
 // ---------------------------------------------------------------------------

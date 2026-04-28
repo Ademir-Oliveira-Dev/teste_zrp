@@ -32,13 +32,12 @@ void main() {
   tearDown(() => cubit.close());
 
   final tFavorite = Favorite(
-    episode: const Episode(
+    episode: const EpisodeEntity(
       id: 1,
       name: 'Pilot',
-      airDate: '',
-      episode: 'S01E01',
-      characters: [],
-      url: '',
+      airDate: 'December 2, 2013',
+      episodeCode: 'S01E01',
+      characterUrls: [],
     ),
     savedAt: DateTime(2024),
   );
